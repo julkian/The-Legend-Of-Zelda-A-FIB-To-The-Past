@@ -1,6 +1,7 @@
 #include "cScene.h"
 #include "Globals.h"
 
+
 cScene::cScene(void)
 {
 }
@@ -12,7 +13,7 @@ cScene::~cScene(void)
 bool cScene::LoadLevel(int level)
 {
 	bool res;
-	FILE *fd;
+	//FILE *fd;
 	char file[16];
 	int i,j,px,py;
 	char tile;
@@ -20,18 +21,22 @@ bool cScene::LoadLevel(int level)
 
 	res=true;
 
+	//construyendo nombre de archivo
 	if(level<10) sprintf(file,"%s0%d%s",(char *)FILENAME,level,(char *)FILENAME_EXT);
 	else		 sprintf(file,"%s%d%s",(char *)FILENAME,level,(char *)FILENAME_EXT);
 
-	fd=fopen(file,"r");
-	if(fd==NULL) return false;
+//	fd=fopen(file,"r");
+//	if(fd==NULL) return false;
+
+	/*La asquerosidad hecha codigo*/
+	std::ifstream fd("level01.csv");
+	std::string str;
+	/*e ya*/
 
 	id_DL=glGenLists(1);
-	//-- TODO: Create new id_DL display list, tiles will be quads
-	
-
-	//--
-	
+	glNewList(id_DL,GL_COMPILE);
+		glBegin(GL_QUADS);
+			
 			for(j=SCENE_HEIGHT-1;j>=0;j--)
 			{
 				px=SCENE_Xo;
@@ -39,7 +44,31 @@ bool cScene::LoadLevel(int level)
 
 				for(i=0;i<SCENE_WIDTH;i++)
 				{
-					fscanf(fd,"%c",&tile);
+					//map[(j*SCENE_WIDTH)+i]=_map[i][j];
+
+					std::getline(fd, str, ',');
+					map[(j*SCENE_WIDTH)+i] = std::stoi(str);
+
+					//coordx_tile = ((map[(j*SCENE_WIDTH)+i] % 16) - 1) * (1/16.0f);
+					//coordy_tile = ((map[(j*SCENE_WIDTH)+i] % 16) - 1) * (1/13.0f);
+
+					coordx_tile = ((map[(j*SCENE_WIDTH)+i] % 16) - 1) * (1/16.0f);
+					coordy_tile = (map[(j*SCENE_WIDTH)+i] / 16) * (1/13.0f);
+
+					//coordx_tile = 1/16.0f;
+					//coordy_tile = 6/13.0f;
+
+					//BLOCK_SIZE = 24, FILE_SIZE = 64
+					// 24 / 64 = 0.375
+					glTexCoord2f(coordx_tile       ,coordy_tile+(1/13.0f));		glVertex2i(px           ,py           );
+					glTexCoord2f(coordx_tile+(1/16.0f),coordy_tile+(1/13.0f));	glVertex2i(px+BLOCK_SIZE,py           );
+					glTexCoord2f(coordx_tile+(1/16.0f),coordy_tile       );		glVertex2i(px+BLOCK_SIZE,py+BLOCK_SIZE);
+					glTexCoord2f(coordx_tile       ,coordy_tile       );		glVertex2i(px           ,py+BLOCK_SIZE);
+
+					px+=TILE_SIZE;
+				}
+					/*
+//					fscanf(fd,"%c",&tile);
 					if(tile==' ')
 					{
 						//Tiles must be != 0 !!!
@@ -55,26 +84,21 @@ bool cScene::LoadLevel(int level)
 						if(map[(j*SCENE_WIDTH)+i]<3) coordy_tile = 0.0f;
 						else						 coordy_tile = 0.5f;
 
-						//-- TODO: complete the quad (tile)
 						//BLOCK_SIZE = 24, FILE_SIZE = 64
 						// 24 / 64 = 0.375
 						glTexCoord2f(coordx_tile       ,coordy_tile+0.375f);	glVertex2i(px           ,py           );
 						glTexCoord2f(coordx_tile+0.375f,coordy_tile+0.375f);	glVertex2i(px+BLOCK_SIZE,py           );
-						
-
-						//--
+						glTexCoord2f(coordx_tile+0.375f,coordy_tile       );	glVertex2i(px+BLOCK_SIZE,py+BLOCK_SIZE);
+						glTexCoord2f(coordx_tile       ,coordy_tile       );	glVertex2i(px           ,py+BLOCK_SIZE);
 					}
 					px+=TILE_SIZE;
 				}
 				fscanf(fd,"%c",&tile); //pass enter
+				*/
 			}
 
-	//-- TODO: Finish quads and the display list
-
-
-	//--
-
-	fclose(fd);
+		glEnd();
+	glEndList();
 
 	return res;
 }
@@ -82,9 +106,8 @@ bool cScene::LoadLevel(int level)
 void cScene::Draw(int tex_id)
 {
 	glEnable(GL_TEXTURE_2D);
-	//-- TODO: Bind the texture and call the display list
-
-	//--
+	glBindTexture(GL_TEXTURE_2D,tex_id);
+	glCallList(id_DL);
 	glDisable(GL_TEXTURE_2D);
 }
 int* cScene::GetMap()

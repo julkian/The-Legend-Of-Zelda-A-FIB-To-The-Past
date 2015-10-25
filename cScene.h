@@ -1,17 +1,27 @@
 #pragma once
 
 #include "cTexture.h"
+#include <iostream>
+#include <fstream>
+#include <string>
 
 #define SCENE_Xo		(2*TILE_SIZE)
 #define SCENE_Yo		TILE_SIZE
-#define SCENE_WIDTH		36
-#define SCENE_HEIGHT	28
+#define SCENE_WIDTH		20
+#define SCENE_HEIGHT	20
 
 #define FILENAME		"level"
-#define FILENAME_EXT	".txt"
+#define FILENAME_EXT	".csv"
 
-#define TILE_SIZE		16
-#define BLOCK_SIZE		24
+//#define TILE_SIZE		16
+//#define BLOCK_SIZE	24
+
+#define TILE_SIZE	16
+#define BLOCK_SIZE	16
+
+/*definiendo variables*/
+#define TILE_ROWS		14	//numero de cuadraicos por fila en el tileset
+#define TILE_COLUMNS	16	//numero de cuadraicos por columna en el tileset
 
 class cScene
 {

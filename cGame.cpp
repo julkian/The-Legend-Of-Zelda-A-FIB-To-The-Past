@@ -24,14 +24,11 @@ bool cGame::Init()
 	glAlphaFunc(GL_GREATER, 0.05f);
 	glEnable(GL_ALPHA_TEST);
 
-	//-- TODO: Scene initialization
-	//Load image with tiles
-	res = Data.LoadImage(IMG_BLOCKS,    ,GL_RGBA);
+	//Scene initialization
+	res = Data.LoadImage(IMG_BLOCKS,"zeldaTileset.png",GL_RGB);
 	if(!res) return false;
-	//Load level 1 of the scene
-	res = 
+	res = Scene.LoadLevel(1);
 	if(!res) return false;
-	//--
 
 	return res;
 }
