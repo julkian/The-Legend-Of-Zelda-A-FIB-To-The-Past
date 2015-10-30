@@ -6,4 +6,4 @@
 !*.h
 !*.cpp
 !*.vcproj
-!resources/*
+!resources/
