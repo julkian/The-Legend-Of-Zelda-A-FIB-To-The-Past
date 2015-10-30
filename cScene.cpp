@@ -14,7 +14,7 @@ bool cScene::LoadLevel(int level)
 {
 	bool res;
 	//FILE *fd;
-	char file[16];
+	//char file[16];
 	int i,j,px,py;
 	char tile;
 	float coordx_tile, coordy_tile;
@@ -22,8 +22,8 @@ bool cScene::LoadLevel(int level)
 	res=true;
 
 	//construyendo nombre de archivo
-	if(level<10) sprintf(file,"%s0%d%s",(char *)FILENAME,level,(char *)FILENAME_EXT);
-	else		 sprintf(file,"%s%d%s",(char *)FILENAME,level,(char *)FILENAME_EXT);
+	//if(level<10) sprintf(file,"%s0%d%s",(char *)FILENAME,level,(char *)FILENAME_EXT);
+	//else		 sprintf(file,"%s%d%s",(char *)FILENAME,level,(char *)FILENAME_EXT);
 
 //	fd=fopen(file,"r");
 //	if(fd==NULL) return false;
@@ -49,20 +49,14 @@ bool cScene::LoadLevel(int level)
 					std::getline(fd, str, ',');
 					map[(j*SCENE_WIDTH)+i] = std::stoi(str);
 
-					//coordx_tile = ((map[(j*SCENE_WIDTH)+i] % 16) - 1) * (1/16.0f);
-					//coordy_tile = ((map[(j*SCENE_WIDTH)+i] % 16) - 1) * (1/13.0f);
-
-					coordx_tile = ((map[(j*SCENE_WIDTH)+i] % 16) - 1) * (1/16.0f);
-					coordy_tile = (map[(j*SCENE_WIDTH)+i] / 16) * (1/13.0f);
-
-					//coordx_tile = 1/16.0f;
-					//coordy_tile = 6/13.0f;
+					coordx_tile = ((map[(j*SCENE_WIDTH)+i] % 10)) * (1/10.0f);
+					coordy_tile = (map[(j*SCENE_WIDTH)+i] / 10) * (1/10.0f);
 
 					//BLOCK_SIZE = 24, FILE_SIZE = 64
 					// 24 / 64 = 0.375
-					glTexCoord2f(coordx_tile       ,coordy_tile+(1/13.0f));		glVertex2i(px           ,py           );
-					glTexCoord2f(coordx_tile+(1/16.0f),coordy_tile+(1/13.0f));	glVertex2i(px+BLOCK_SIZE,py           );
-					glTexCoord2f(coordx_tile+(1/16.0f),coordy_tile       );		glVertex2i(px+BLOCK_SIZE,py+BLOCK_SIZE);
+					glTexCoord2f(coordx_tile       ,coordy_tile+(1/10.0f));		glVertex2i(px           ,py           );
+					glTexCoord2f(coordx_tile+(1/10.0f),coordy_tile+(1/10.0f));	glVertex2i(px+BLOCK_SIZE,py           );
+					glTexCoord2f(coordx_tile+(1/10.0f),coordy_tile       );		glVertex2i(px+BLOCK_SIZE,py+BLOCK_SIZE);
 					glTexCoord2f(coordx_tile       ,coordy_tile       );		glVertex2i(px           ,py+BLOCK_SIZE);
 
 					px+=TILE_SIZE;

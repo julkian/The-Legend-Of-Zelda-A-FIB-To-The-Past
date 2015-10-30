@@ -25,7 +25,7 @@ bool cGame::Init()
 	glEnable(GL_ALPHA_TEST);
 
 	//Scene initialization
-	res = Data.LoadImage(IMG_BLOCKS,"zeldaTileset.png",GL_RGB);
+	res = Data.LoadImage(IMG_BLOCKS,"resources/level/overworld.png",GL_RGB);
 	if(!res) return false;
 	res = Scene.LoadLevel(1);
 	if(!res) return false;
