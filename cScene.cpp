@@ -10,8 +10,20 @@ cScene::~cScene(void)
 {
 }
 
+/*
+Tmx::Map *loadMap() 
+{
+	Tmx::Map *map = new Tmx::Map();
+	std::string fileName = "./resources/levels/demo.tmx";
+    map->ParseFile(fileName);
+	return map;
+}
+*/
+
 bool cScene::LoadLevel(int level)
 {
+//	Tmx::Map *_map = loadMap();
+
 	bool res;
 	//FILE *fd;
 	//char file[16];
@@ -30,13 +42,19 @@ bool cScene::LoadLevel(int level)
 
 	/*La asquerosidad hecha codigo*/
 	std::ifstream fd("level01.csv");
+
+	//archivo con num capas
+
+	//std::ifstream fd(std::string(FILENAME)+ std::string(FILENAME_EXT));
 	std::string str;
-	/*e ya*/
+
+	//int numLayers;
+	//fd >> numLayers;
 
 	id_DL=glGenLists(1);
 	glNewList(id_DL,GL_COMPILE);
 		glBegin(GL_QUADS);
-			
+		//for (int h = 0; h < numLayers; ++h) {
 			for(j=SCENE_HEIGHT-1;j>=0;j--)
 			{
 				px=SCENE_Xo;
@@ -61,34 +79,6 @@ bool cScene::LoadLevel(int level)
 
 					px+=TILE_SIZE;
 				}
-					/*
-//					fscanf(fd,"%c",&tile);
-					if(tile==' ')
-					{
-						//Tiles must be != 0 !!!
-						map[(j*SCENE_WIDTH)+i]=0;
-					}
-					else
-					{
-						//Tiles = 1,2,3,...
-						map[(j*SCENE_WIDTH)+i] = tile-48;
-
-						if(map[(j*SCENE_WIDTH)+i]%2) coordx_tile = 0.0f;
-						else						 coordx_tile = 0.5f;
-						if(map[(j*SCENE_WIDTH)+i]<3) coordy_tile = 0.0f;
-						else						 coordy_tile = 0.5f;
-
-						//BLOCK_SIZE = 24, FILE_SIZE = 64
-						// 24 / 64 = 0.375
-						glTexCoord2f(coordx_tile       ,coordy_tile+0.375f);	glVertex2i(px           ,py           );
-						glTexCoord2f(coordx_tile+0.375f,coordy_tile+0.375f);	glVertex2i(px+BLOCK_SIZE,py           );
-						glTexCoord2f(coordx_tile+0.375f,coordy_tile       );	glVertex2i(px+BLOCK_SIZE,py+BLOCK_SIZE);
-						glTexCoord2f(coordx_tile       ,coordy_tile       );	glVertex2i(px           ,py+BLOCK_SIZE);
-					}
-					px+=TILE_SIZE;
-				}
-				fscanf(fd,"%c",&tile); //pass enter
-				*/
 			}
 
 		glEnd();

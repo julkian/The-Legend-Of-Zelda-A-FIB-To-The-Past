@@ -4,19 +4,21 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+//#include "Tmx.h"
 
 #define SCENE_Xo		(2*TILE_SIZE)
 #define SCENE_Yo		TILE_SIZE
 #define SCENE_WIDTH		16
 #define SCENE_HEIGHT	11
 
-#define FILENAME		"level"
+#define FILENAME		"demo"
 #define FILENAME_EXT	".csv"
 
 #define TILE_SIZE	16
 #define BLOCK_SIZE	16
 
 /*definiendo variables*/
+
 #define TILE_ROWS		10	//numero de cuadraicos por fila en el tileset
 #define TILE_COLUMNS	10	//numero de cuadraicos por columna en el tileset
 
