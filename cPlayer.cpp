@@ -32,6 +32,14 @@ void cPlayer::Draw(int tex_id)
 		case STATE_WALKRIGHT:	xo = 0.6f + (GetFrame()*0.1f);;
 								NextFrame(2);
 								break;
+		//1..3
+		case STATE_WALKUP:	xo = 0.4f + (GetFrame()*0.1f);
+								NextFrame(2);
+								break;
+		//4..6
+		case STATE_WALKDOWN:	xo = 0.0f + (GetFrame()*0.1f);;
+								NextFrame(2);
+								break;
 	}
 	xf = xo + 0.1f;
 	yf = 0.0f;

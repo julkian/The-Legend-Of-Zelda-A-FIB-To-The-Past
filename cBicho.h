@@ -44,6 +44,8 @@ public:
 
 	void MoveRight(int *map);
 	void MoveLeft(int *map);
+	void MoveUp(int *map);
+	void MoveDown(int *map);
 	void Stop();
 	void Logic(int *map);
 
