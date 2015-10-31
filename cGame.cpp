@@ -18,9 +18,8 @@ bool cGame::Init()
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0,GAME_WIDTH,0,GAME_HEIGHT,0,1);
+	glOrtho(0,GAME_WIDTH/2,0,GAME_HEIGHT/2,0,1);
 	glMatrixMode(GL_MODELVIEW);
-	
 	glAlphaFunc(GL_GREATER, 0.05f);
 	glEnable(GL_ALPHA_TEST);
 
@@ -29,6 +28,14 @@ bool cGame::Init()
 	if(!res) return false;
 	res = Scene.LoadLevel(1);
 	if(!res) return false;
+
+	//Player initialization
+	res = Data.LoadImage(IMG_PLAYER,"resources/charset/link.png",GL_RGBA);
+	if(!res) return false;
+	Player.SetWidthHeight(16,16);
+	Player.SetTile(0,5);
+	Player.SetWidthHeight(16,16);
+	Player.SetState(STATE_LOOKRIGHT);
 
 	return res;
 }
@@ -79,6 +86,7 @@ void cGame::Render()
 	glLoadIdentity();
 
 	Scene.Draw(Data.GetID(IMG_BLOCKS));
+	Player.Draw(Data.GetID(IMG_PLAYER));
 
 	glutSwapBuffers();
 }
