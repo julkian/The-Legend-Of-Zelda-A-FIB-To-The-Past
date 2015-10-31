@@ -18,21 +18,20 @@ void cPlayer::Draw(int tex_id)
 		case STATE_LOOKRIGHT:	xo = 0.6f;
 								break;
 		//1
-		case STATE_LOOKUP:	xo = 0.4f;
+		case STATE_LOOKUP:		xo = 0.4f;
 								break;
 		//4
 		case STATE_LOOKDOWN:	xo = 0.0f;
 								break;
-								/*
+
 		//1..3
-		case STATE_WALKLEFT:	xo = 0.0f;	yo = 0.25f + (GetFrame()*0.25f);
-								NextFrame(3);
+		case STATE_WALKLEFT:	xo = 0.2f + (GetFrame()*0.1f);
+								NextFrame(2);
 								break;
 		//4..6
-		case STATE_WALKRIGHT:	xo = 0.25f; yo = 0.25f + (GetFrame()*0.25f);
-								NextFrame(3);
+		case STATE_WALKRIGHT:	xo = 0.6f + (GetFrame()*0.1f);;
+								NextFrame(2);
 								break;
-								*/
 	}
 	xf = xo + 0.1f;
 	yf = 0.0f;

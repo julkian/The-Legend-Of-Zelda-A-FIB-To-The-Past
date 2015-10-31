@@ -73,7 +73,11 @@ bool cGame::Process()
 	if(keys[27])	res=false;	
 	
 	//Game Logic
-	//...
+//	if(keys[GLUT_KEY_UP])			Player.MoveUp(Scene.GetMap());
+//	else if(keys[GLUT_KEY_RIGHT])	Player.MoveDown(Scene.GetMap());
+	else if(keys[GLUT_KEY_LEFT])	Player.MoveLeft(Scene.GetMap());
+	else if(keys[GLUT_KEY_RIGHT])	Player.MoveRight(Scene.GetMap());
+	else Player.Stop();
 
 	return res;
 }
