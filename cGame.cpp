@@ -37,6 +37,28 @@ bool cGame::Init()
 	Player.SetWidthHeight(16,16);
 	Player.SetState(STATE_LOOKRIGHT);
 
+	//Enemies initialization
+	res = Data.LoadImage(IMG_PLAYER,"resources/charset/enemyWizard.png",GL_RGBA);
+	if(!res) return false;
+	//Player.SetWidthHeight(16,16);
+	//Player.SetTile(0,5);
+	//Player.SetWidthHeight(16,16);
+	//Player.SetState(STATE_LOOKRIGHT);
+
+	res = Data.LoadImage(IMG_PLAYER,"resources/charset/enemyOctopus.png",GL_RGBA);
+	if(!res) return false;
+	//Player.SetWidthHeight(16,16);
+	//Player.SetTile(0,5);
+	//Player.SetWidthHeight(16,16);
+	//Player.SetState(STATE_LOOKRIGHT);
+
+	res = Data.LoadImage(IMG_PLAYER,"resources/charset/enemyDog.png",GL_RGBA);
+	if(!res) return false;
+	//Player.SetWidthHeight(16,16);
+	//Player.SetTile(0,5);
+	//Player.SetWidthHeight(16,16);
+	//Player.SetState(STATE_LOOKRIGHT);
+
 	return res;
 }
 

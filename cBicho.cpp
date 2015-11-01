@@ -296,3 +296,35 @@ void cBicho::SetState(int s)
 {
 	state = s;
 }
+
+int cBicho::getMaxHealth() 
+{
+	return this->maxHealth;
+}
+
+void cBicho::setMaxHealth(int maxHealth)
+{
+	this->maxHealth = maxHealth;
+}
+
+int cBicho::getActualHealth()
+{
+	return this->actualHealth;
+}
+
+bool cBicho::takeDamage(int damage)
+{
+	this->actualHealth -= damage;
+	if (this->actualHealth <= 0) return true;
+	else return false;
+}
+
+int cBicho::getDamage()
+{
+	return this->damage;
+}
+
+void cBicho::setDamage(int damage)
+{
+	this->damage = damage;
+}

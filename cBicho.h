@@ -55,6 +55,17 @@ public:
 
 	void NextFrame(int max);
 	int  GetFrame();
+
+	int getMaxHealth();
+	void setMaxHealth(int maxHealth);
+
+	int getActualHealth();
+	void setActualHealth(int actualHealth);
+
+	bool takeDamage(int damage);
+
+	int getDamage();
+	void setDamage(int damage);
 	
 private:
 	int x,y;
@@ -66,4 +77,8 @@ private:
 	int jump_y;
 
 	int seq,delay;
+	
+	int maxHealth, actualHealth;
+	int damage;
+
 };
