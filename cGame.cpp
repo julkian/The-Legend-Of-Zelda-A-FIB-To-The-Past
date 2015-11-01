@@ -40,27 +40,21 @@ bool cGame::Init()
 
 	//Enemies initialization
 	
+	//Octopus
+	res = Data.LoadImage(IMG_OCTOPUS,"resources/charset/enemyOctopus.png",GL_RGBA);
+	if(!res) return false;
+	Octopus.SetWidthHeight(16,16);
+	Octopus.SetTile(5,5);
+	Octopus.SetWidthHeight(16,16);	
+	
+	//Dog
 	res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
 	if(!res) return false;
 	Dog.SetWidthHeight(16,16);
 	Dog.SetTile(3,4);
 	Dog.SetWidthHeight(16,16);
-	Dog.SetState(STATE_LOOKRIGHT);
-	/*
-	res = Data.LoadImage(IMG_PLAYER,"resources/charset/enemyOctopus.png",GL_RGBA);
-	if(!res) return false;
-	//Player.SetWidthHeight(16,16);
-	//Player.SetTile(0,5);
-	//Player.SetWidthHeight(16,16);
-	//Player.SetState(STATE_LOOKRIGHT);
+	Dog.SetState(STATE_LOOKRIGHT);	
 
-	res = Data.LoadImage(IMG_PLAYER,"resources/charset/enemyDog.png",GL_RGBA);
-	if(!res) return false;
-	//Player.SetWidthHeight(16,16);
-	//Player.SetTile(0,5);
-	//Player.SetWidthHeight(16,16);
-	//Player.SetState(STATE_LOOKRIGHT);
-	*/
 	return res;
 }
 
@@ -104,6 +98,7 @@ bool cGame::Process()
 	else Player.Stop();
 
 	Dog.Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
+	Octopus.Move(Scene.GetMap());
 
 	return res;
 }
@@ -118,6 +113,7 @@ void cGame::Render()
 	Scene.Draw(Data.GetID(IMG_BLOCKS));
 	Player.Draw(Data.GetID(IMG_PLAYER));
 	Dog.Draw(Data.GetID(IMG_DOG));
+	Octopus.Draw(Data.GetID(IMG_OCTOPUS));
 
 	glutSwapBuffers();
 }

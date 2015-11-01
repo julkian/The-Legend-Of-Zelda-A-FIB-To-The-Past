@@ -4,6 +4,7 @@
 #include "cData.h"
 #include "cPlayer.h"
 #include "cDog.h"
+#include "cOctopus.h"
 
 #define GAME_WIDTH	800
 #define GAME_HEIGHT 600
@@ -32,4 +33,5 @@ private:
 	cData Data;
 	cPlayer Player;
 	cDog Dog;
+	cOctopus Octopus;
 };
