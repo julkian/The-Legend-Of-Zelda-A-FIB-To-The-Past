@@ -38,6 +38,7 @@ bool cGame::Init()
 	Player.SetState(STATE_LOOKRIGHT);
 
 	//Enemies initialization
+	/*
 	res = Data.LoadImage(IMG_PLAYER,"resources/charset/enemyWizard.png",GL_RGBA);
 	if(!res) return false;
 	//Player.SetWidthHeight(16,16);
@@ -58,7 +59,7 @@ bool cGame::Init()
 	//Player.SetTile(0,5);
 	//Player.SetWidthHeight(16,16);
 	//Player.SetState(STATE_LOOKRIGHT);
-
+	*/
 	return res;
 }
 
