@@ -3,9 +3,10 @@
 #include "cScene.h"
 #include "cData.h"
 #include "cPlayer.h"
+#include "cDog.h"
 
-#define GAME_WIDTH	640
-#define GAME_HEIGHT 480
+#define GAME_WIDTH	800
+#define GAME_HEIGHT 600
 
 class cGame
 {
@@ -30,4 +31,5 @@ private:
 	cScene Scene;
 	cData Data;
 	cPlayer Player;
+	cDog Dog;
 };

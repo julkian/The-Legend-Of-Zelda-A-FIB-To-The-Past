@@ -32,6 +32,8 @@ public:
 
 	void SetPosition(int x,int y);
 	void GetPosition(int *x,int *y);
+	int GetPositionX();
+	int GetPositionY();
 	void SetTile(int tx,int ty);
 	void GetTile(int *tx,int *ty);
 	void SetWidthHeight(int w,int h);

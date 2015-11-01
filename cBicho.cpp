@@ -28,6 +28,14 @@ void cBicho::GetPosition(int *posx,int *posy)
 	*posx = x;
 	*posy = y;
 }
+int cBicho::GetPositionX()
+{
+	return x;
+}
+int cBicho::GetPositionY()
+{
+	return y;
+}
 void cBicho::SetTile(int tx,int ty)
 {
 	x = tx * TILE_SIZE;

@@ -18,7 +18,7 @@ bool cGame::Init()
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0,GAME_WIDTH/2,0,GAME_HEIGHT/2,0,1);
+	glOrtho(0,GAME_WIDTH/2.5,0,GAME_HEIGHT/2.5,0,1);
 	glMatrixMode(GL_MODELVIEW);
 	glAlphaFunc(GL_GREATER, 0.05f);
 	glEnable(GL_ALPHA_TEST);
@@ -30,22 +30,23 @@ bool cGame::Init()
 	if(!res) return false;
 
 	//Player initialization
+
 	res = Data.LoadImage(IMG_PLAYER,"resources/charset/link.png",GL_RGBA);
 	if(!res) return false;
 	Player.SetWidthHeight(16,16);
-	Player.SetTile(0,5);
+	Player.SetTile(10,5);
 	Player.SetWidthHeight(16,16);
 	Player.SetState(STATE_LOOKRIGHT);
 
 	//Enemies initialization
-	/*
-	res = Data.LoadImage(IMG_PLAYER,"resources/charset/enemyWizard.png",GL_RGBA);
+	
+	res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
 	if(!res) return false;
-	//Player.SetWidthHeight(16,16);
-	//Player.SetTile(0,5);
-	//Player.SetWidthHeight(16,16);
-	//Player.SetState(STATE_LOOKRIGHT);
-
+	Dog.SetWidthHeight(16,16);
+	Dog.SetTile(3,4);
+	Dog.SetWidthHeight(16,16);
+	Dog.SetState(STATE_LOOKRIGHT);
+	/*
 	res = Data.LoadImage(IMG_PLAYER,"resources/charset/enemyOctopus.png",GL_RGBA);
 	if(!res) return false;
 	//Player.SetWidthHeight(16,16);
@@ -102,6 +103,8 @@ bool cGame::Process()
 	else if(keys[GLUT_KEY_RIGHT])	Player.MoveRight(Scene.GetMap());
 	else Player.Stop();
 
+	Dog.Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
+
 	return res;
 }
 
@@ -114,6 +117,7 @@ void cGame::Render()
 
 	Scene.Draw(Data.GetID(IMG_BLOCKS));
 	Player.Draw(Data.GetID(IMG_PLAYER));
+	Dog.Draw(Data.GetID(IMG_DOG));
 
 	glutSwapBuffers();
 }
