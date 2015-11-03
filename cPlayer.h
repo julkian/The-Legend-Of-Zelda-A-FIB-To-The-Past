@@ -5,6 +5,8 @@
 #define PLAYER_START_CX		3
 #define PLAYER_START_CY		2
 
+#define ATTACK_DELAY		20
+
 #define STEP_LENGTH			2
 
 class cPlayer: public cBicho
@@ -15,4 +17,5 @@ public:
 
 	void Draw(int tex_id);
 	void DrawRect(int tex_id,float xo,float yo,float xf,float yf);
+	void Attack();
 };

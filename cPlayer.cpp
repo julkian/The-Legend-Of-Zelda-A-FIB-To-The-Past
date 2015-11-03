@@ -76,7 +76,7 @@ void cPlayer::Draw(int tex_id)
 	DrawRect(tex_id,xo,yo,xf,yf);
 }
 
-void cBicho::Attack()
+void cPlayer::Attack()
 {
 	int state = GetState();
 	if (state == STATE_LOOKLEFT || state == STATE_WALKLEFT) {
@@ -88,6 +88,8 @@ void cBicho::Attack()
 	} else if (state == STATE_LOOKUP || state == STATE_WALKUP) {
 		SetState(STATE_ATTACKUP);
 	}
+
+	//delay = 0;
 }
 
 void cPlayer::DrawRect(int tex_id,float xo,float yo,float xf,float yf)

@@ -346,3 +346,21 @@ void cBicho::setStepLength(float stepLength) {
 float cBicho::getStepLength() {
 	return this->stepLength;
 }
+
+void cBicho::Attack()
+{
+	/*
+	int state = GetState();
+	if (state == STATE_LOOKLEFT || state == STATE_WALKLEFT) {
+		SetState(STATE_ATTACKLEFT);
+	} else if (state == STATE_LOOKRIGHT || state == STATE_WALKRIGHT) {
+		SetState(STATE_ATTACKRIGHT);
+	} else if (state == STATE_LOOKDOWN || state == STATE_WALKDOWN) {
+		SetState(STATE_ATTACKDOWN);
+	} else if (state == STATE_LOOKUP || state == STATE_WALKUP) {
+		SetState(STATE_ATTACKUP);
+	}
+
+	delay = 0;
+	*/
+}
