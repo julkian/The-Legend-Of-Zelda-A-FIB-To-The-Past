@@ -269,6 +269,8 @@ void cBicho::MoveDown(int *map)
 		}
 	}
 }
+
+
 void cBicho::Stop()
 {
 	switch(state)
