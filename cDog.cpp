@@ -1,7 +1,9 @@
 
 #include "cDog.h"
 
-cDog::cDog() {}
+cDog::cDog() {
+	setStepLength(STEP_LENGTH);
+}
 cDog::~cDog(){}
 
 void cDog::Draw(int tex_id)

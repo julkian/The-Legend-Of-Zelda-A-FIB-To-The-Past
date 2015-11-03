@@ -1,7 +1,9 @@
 
 #include "cPlayer.h"
 
-cPlayer::cPlayer() {}
+cPlayer::cPlayer() {
+	setStepLength(STEP_LENGTH);
+}
 cPlayer::~cPlayer(){}
 
 void cPlayer::Draw(int tex_id)

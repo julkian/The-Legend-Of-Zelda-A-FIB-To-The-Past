@@ -4,7 +4,6 @@
 #include "Globals.h"
 
 #define FRAME_DELAY		8
-#define STEP_LENGTH		2
 
 #define STATE_LOOKLEFT		0
 #define STATE_LOOKRIGHT		1
@@ -68,6 +67,9 @@ public:
 
 	int getDamage();
 	void setDamage(int damage);
+
+	float getStepLength();
+	void setStepLength(float sl);
 	
 private:
 	int x,y;
@@ -83,4 +85,5 @@ private:
 	int maxHealth, actualHealth;
 	int damage;
 
+	float stepLength;
 };

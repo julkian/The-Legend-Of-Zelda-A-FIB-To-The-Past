@@ -170,12 +170,12 @@ void cBicho::MoveLeft(int *map)
 		//Whats next tile?
 		if( (x % TILE_SIZE) == 0)
 		{
-			x -= STEP_LENGTH;
+			x -= getStepLength();
 		}
 		//Advance, no problem
 		else
 		{
-			x -= STEP_LENGTH;
+			x -= getStepLength();
 			if(state != STATE_WALKLEFT)
 			{
 				state = STATE_WALKLEFT;
@@ -197,12 +197,12 @@ void cBicho::MoveRight(int *map)
 		if( (x % TILE_SIZE) == 0)
 		{
 			xaux = x;
-			x += STEP_LENGTH;	
+			x += getStepLength();	
 		}
 		//Advance, no problem
 		else
 		{
-			x += STEP_LENGTH;
+			x += getStepLength();
 
 			if(state != STATE_WALKRIGHT)
 			{
@@ -225,12 +225,12 @@ void cBicho::MoveUp(int *map)
 		if( (y % TILE_SIZE) == 0)
 		{
 			yaux = y;
-			y += STEP_LENGTH;
+			y += getStepLength();
 		}
 		//Advance, no problem
 		else
 		{
-			y += STEP_LENGTH;
+			y += getStepLength();
 
 			if(state != STATE_WALKUP)
 			{
@@ -253,12 +253,12 @@ void cBicho::MoveDown(int *map)
 		if( (y % TILE_SIZE) == 0)
 		{
 			yaux = y;
-			y -= STEP_LENGTH;
+			y -= getStepLength();
 		}
 		//Advance, no problem
 		else
 		{
-			y -= STEP_LENGTH;
+			y -= getStepLength();
 
 			if(state != STATE_WALKDOWN)
 			{
@@ -335,4 +335,12 @@ int cBicho::getDamage()
 void cBicho::setDamage(int damage)
 {
 	this->damage = damage;
+}
+
+void cBicho::setStepLength(float stepLength) {
+	this->stepLength = stepLength;
+}
+
+float cBicho::getStepLength() {
+	return this->stepLength;
 }

@@ -4,7 +4,10 @@
 
 #define PLAYER_START_CX			5
 #define PLAYER_START_CY			5
+
 #define CHANGE_DIRECTION_CHANCE	10
+
+#define STEP_LENGTH			1
 
 class cOctopus: public cBicho
 {
