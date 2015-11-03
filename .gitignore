@@ -6,4 +6,5 @@
 !*.h
 !*.cpp
 !*.vcproj
-!resources/
+!resources/*
+!*.csv
