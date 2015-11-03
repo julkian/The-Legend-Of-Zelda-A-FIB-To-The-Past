@@ -5,7 +5,7 @@
 #define PLAYER_START_CX		3
 #define PLAYER_START_CY		2
 
-#define STEP_LENGTH			1
+#define STEP_LENGTH			0
 
 class cDog: public cBicho
 {
