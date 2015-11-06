@@ -6,7 +6,6 @@ cOctopus::cOctopus() {
 	else if (randDirection < 50)	SetState(STATE_LOOKUP);
 	else if (randDirection < 75)	SetState(STATE_LOOKDOWN);
 	else							SetState(STATE_LOOKRIGHT);
-
 	setStepLength(STEP_LENGTH);
 }
 cOctopus::~cOctopus(){}
