@@ -44,15 +44,19 @@ void cPlayer::Draw(int tex_id)
 								break;
 
 		case STATE_ATTACKLEFT:	xo = 0.2f; yo = 2/3.0;
+			NextFrame(1);
 								break;
 
 		case STATE_ATTACKRIGHT:	xo = 0.2f; yo = 1.0;
+			NextFrame(1);
 								break;
 
 		case STATE_ATTACKUP:	xo = 0.1f; yo = 1.0;
+			NextFrame(1);
 								break;
 
 		case STATE_ATTACKDOWN:	xo = 0.0f; yo = 1.0;
+			NextFrame(1);
 								break;
 	}
 	
@@ -89,7 +93,8 @@ void cPlayer::Attack()
 		SetState(STATE_ATTACKUP);
 	}
 
-	//delay = 0;
+	seq = 0;
+	delay = 0;
 }
 
 void cPlayer::DrawRect(int tex_id,float xo,float yo,float xf,float yf)

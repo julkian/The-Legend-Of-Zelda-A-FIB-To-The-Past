@@ -3,7 +3,8 @@
 #include "cTexture.h"
 #include "Globals.h"
 
-#define FRAME_DELAY		8
+#define FRAME_DELAY			8
+#define ATTACK_FRAME_DELAY	16
 
 #define STATE_LOOKLEFT		0
 #define STATE_LOOKRIGHT		1
@@ -85,11 +86,12 @@ private:
 	bool jumping;
 	int jump_alfa;
 	int jump_y;
-
-	int seq,delay;
 	
 	int maxHealth, actualHealth;
 	int damage;
 
 	float stepLength;
+
+protected:
+	int seq,delay;
 };

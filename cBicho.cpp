@@ -275,10 +275,22 @@ void cBicho::Stop()
 {
 	switch(state)
 	{
-		case STATE_WALKLEFT:	state = STATE_LOOKLEFT;		break;
-		case STATE_WALKRIGHT:	state = STATE_LOOKRIGHT;	break;
-		case STATE_WALKUP:		state = STATE_LOOKUP;		break;
-		case STATE_WALKDOWN:	state = STATE_LOOKDOWN;		break;
+		case STATE_WALKLEFT:	
+		//case STATE_ATTACKLEFT:
+			state = STATE_LOOKLEFT;		
+			break;
+		case STATE_WALKRIGHT:
+		//case STATE_ATTACKRIGHT:
+			state = STATE_LOOKRIGHT;	
+			break;
+		case STATE_WALKUP:
+		//case STATE_ATTACKUP:
+			state = STATE_LOOKUP;		
+			break;
+		case STATE_WALKDOWN:
+		//case STATE_ATTACKDOWN:
+			state = STATE_LOOKDOWN;		
+			break;
 	}
 }
 void cBicho::Logic(int *map)
@@ -287,7 +299,23 @@ void cBicho::Logic(int *map)
 void cBicho::NextFrame(int max)
 {
 	delay++;
-	if(delay == FRAME_DELAY)
+	if (delay == ATTACK_FRAME_DELAY && (state == STATE_ATTACKLEFT || state == STATE_ATTACKRIGHT || state == STATE_ATTACKUP || state == STATE_ATTACKDOWN)) {
+		delay = 0;
+		switch(state) {
+			case STATE_ATTACKLEFT:
+				state = STATE_LOOKLEFT;		
+				break;
+			case STATE_ATTACKRIGHT:
+				state = STATE_LOOKRIGHT;	
+				break;
+			case STATE_ATTACKUP:
+				state = STATE_LOOKUP;		
+				break;
+			case STATE_ATTACKDOWN:
+				state = STATE_LOOKDOWN;		
+				break;
+		}
+	} else if(delay == FRAME_DELAY && !(state == STATE_ATTACKLEFT || state == STATE_ATTACKRIGHT || state == STATE_ATTACKUP || state == STATE_ATTACKDOWN))
 	{
 		seq++;
 		seq%=max;
