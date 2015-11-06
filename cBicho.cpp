@@ -299,7 +299,7 @@ void cBicho::Logic(int *map)
 void cBicho::NextFrame(int max)
 {
 	delay++;
-	if (delay == ATTACK_FRAME_DELAY && (state == STATE_ATTACKLEFT || state == STATE_ATTACKRIGHT || state == STATE_ATTACKUP || state == STATE_ATTACKDOWN)) {
+	if (delay == ATTACK_FRAME_DELAY && isAttacking()) {
 		delay = 0;
 		switch(state) {
 			case STATE_ATTACKLEFT:
@@ -377,7 +377,6 @@ float cBicho::getStepLength() {
 
 void cBicho::Attack()
 {
-	/*
 	int state = GetState();
 	if (state == STATE_LOOKLEFT || state == STATE_WALKLEFT) {
 		SetState(STATE_ATTACKLEFT);
@@ -390,5 +389,11 @@ void cBicho::Attack()
 	}
 
 	delay = 0;
-	*/
+}
+
+bool cBicho::isAttacking()
+{
+	if (state == STATE_ATTACKLEFT || state == STATE_ATTACKRIGHT || state == STATE_ATTACKUP || state == STATE_ATTACKDOWN) return true;
+
+	return false;
 }

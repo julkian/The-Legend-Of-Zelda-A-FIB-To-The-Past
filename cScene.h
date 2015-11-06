@@ -6,8 +6,8 @@
 #include <string>
 //#include "Tmx.h"
 
-#define SCENE_Xo		(2*TILE_SIZE)
-#define SCENE_Yo		TILE_SIZE
+#define SCENE_Xo		0
+#define SCENE_Yo		0
 #define SCENE_WIDTH		16
 #define SCENE_HEIGHT	11
 

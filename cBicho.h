@@ -77,6 +77,8 @@ public:
 
 	float getStepLength();
 	void setStepLength(float sl);
+
+	bool isAttacking();
 	
 private:
 	int x,y;

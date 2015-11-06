@@ -6,8 +6,8 @@
 #include "cDog.h"
 #include "cOctopus.h"
 
-#define GAME_WIDTH	800
-#define GAME_HEIGHT 600
+#define GAME_WIDTH	640
+#define GAME_HEIGHT 550
 
 class cGame
 {
