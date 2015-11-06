@@ -15,6 +15,11 @@
 #define STATE_WALKUP		6
 #define STATE_WALKDOWN		7
 
+#define STATE_ATTACKLEFT	8
+#define STATE_ATTACKRIGHT	9
+#define	STATE_ATTACKUP		10
+#define	STATE_ATTACKDOWN	11
+
 class cRect
 {
 public:
@@ -48,6 +53,7 @@ public:
 	void MoveLeft(int *map);
 	void MoveUp(int *map);
 	void MoveDown(int *map);
+	void Attack();
 	void Stop();
 	void Logic(int *map);
 
