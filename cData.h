@@ -7,10 +7,10 @@
 #define NUM_IMG		4
 
 //Image identifiers
-#define IMG_BLOCKS	0
-#define IMG_PLAYER	1
-#define IMG_DOG		2
-#define IMG_OCTOPUS	3
+#define IMG_TILESET		0
+#define IMG_PLAYER		1
+#define IMG_DOG			2
+#define IMG_OCTOPUS		3
 /*
 #define IMG_SHOOT	4
 ...

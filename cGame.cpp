@@ -18,13 +18,15 @@ bool cGame::Init()
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0,GAME_WIDTH/2.5,0,GAME_HEIGHT/2.5,0,1);
+	currentLevelX = 0;
+	currentLevelY = 0;
+	glOrtho(currentLevelX,currentLevelX+LEVEL_WIDTH,currentLevelY,currentLevelY + LEVEL_HEIGHT + MENU_MARGIN,0,1);
 	glMatrixMode(GL_MODELVIEW);
 	glAlphaFunc(GL_GREATER, 0.05f);
 	glEnable(GL_ALPHA_TEST);
 
 	//Scene initialization
-	res = Data.LoadImage(IMG_BLOCKS,"resources/level/overworld.png",GL_RGB);
+	res = Data.LoadImage(IMG_TILESET,"resources/level/tileset.png",GL_RGB);
 	if(!res) return false;
 	res = Scene.LoadLevel(1);
 	if(!res) return false;
@@ -102,7 +104,50 @@ bool cGame::Process()
 	Dog.Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
 	Octopus.Move(Scene.GetMap());
 
+	ChangeLevel();
+
 	return res;
+}
+
+void cGame::ChangeLevel()
+{
+	int tileX;
+	int tileY;
+	Player.GetTile(&tileX, &tileY);
+	int state = Player.GetState();
+	if (tileX == 8 || tileX == 9) {
+		if (tileY == 11 && state == 6) { // 1 -> 2
+			currentLevelY = LEVEL_HEIGHT;
+		} else if (tileY == 12 && state == 7) { // 2 -> 1
+			currentLevelY = 0;
+		} else if (tileY == 21 && state == 6) { // 2 -> 3
+			currentLevelY = 2*LEVEL_HEIGHT;
+			// TODO update Link position
+		} else if (tileY == 23 && state == 7) { // 3 -> 2
+			currentLevelY = LEVEL_HEIGHT;
+			// TODO update Link position
+		}
+	} else if (tileY == 27 || tileY == 28) {
+		if (tileX == 16 && state == 5) { // 3 -> 4
+			currentLevelX = LEVEL_WIDTH;
+			// TODO update Link position
+		} else if (tileX == 17 && state == 4) { // 4 -> 3
+			currentLevelX = 0;
+			// TODO update Link position
+		}
+	} else if (tileX == 24 || tileX == 25) { //
+		if (tileY == 22 && state == 6) { // 5 -> 4
+			currentLevelY = 2*LEVEL_HEIGHT;
+			// TODO update Link position
+		} else if (tileY == 23 && state == 7) { // 4 -> 5
+			currentLevelY = LEVEL_HEIGHT;
+			// TODO update Link position
+		}
+	}
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(currentLevelX,currentLevelX+LEVEL_WIDTH,currentLevelY,currentLevelY + LEVEL_HEIGHT + MENU_MARGIN,0,1);
+	glMatrixMode(GL_MODELVIEW);
 }
 
 //Output
@@ -112,7 +157,7 @@ void cGame::Render()
 	
 	glLoadIdentity();
 
-	Scene.Draw(Data.GetID(IMG_BLOCKS));
+	Scene.Draw(Data.GetID(IMG_TILESET));
 	Player.Draw(Data.GetID(IMG_PLAYER));
 	Dog.Draw(Data.GetID(IMG_DOG));
 	Octopus.Draw(Data.GetID(IMG_OCTOPUS));
