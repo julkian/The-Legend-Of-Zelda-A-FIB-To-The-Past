@@ -5,6 +5,8 @@
 #include "cPlayer.h"
 #include "cDog.h"
 #include "cOctopus.h"
+#include "cBicho.h"
+#include <vector>
 
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 550
@@ -32,6 +34,8 @@ public:
 	//Output
 	void Render();
 
+	void drawBichos();
+
 private:
 	unsigned char keys[256];
 	cScene Scene;
@@ -39,5 +43,6 @@ private:
 	cPlayer Player;
 	cDog Dog;
 	cOctopus Octopus;
+	std::vector<cBicho> bichos;
 	int currentLevelX, currentLevelY;
 };
