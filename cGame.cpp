@@ -41,19 +41,23 @@ bool cGame::Init()
 	//Enemies initialization
 	
 	//Octopus
+	cOctopus Octopus;
 	res = Data.LoadImage(IMG_OCTOPUS,"resources/charset/enemyOctopus.png",GL_RGBA);
 	if(!res) return false;
 	Octopus.SetWidthHeight(16,16);
 	Octopus.SetTile(5,5);
 	Octopus.SetWidthHeight(16,16);	
-	
+	bichos[0] = Octopus;
+
 	//Dog
+	cDog Dog;
 	res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
 	if(!res) return false;
 	Dog.SetWidthHeight(16,16);
 	Dog.SetTile(3,4);
 	Dog.SetWidthHeight(16,16);
 	Dog.SetState(STATE_LOOKRIGHT);	
+	bichos[1] = Dog;
 
 	return res;
 }
@@ -91,11 +95,12 @@ bool cGame::Process()
 	if(keys[27])	res=false;	
 	
 	//Game Logic
-	if(keys['w'] && !Player.isAttacking())	Player.Attack();
-	else if(keys[GLUT_KEY_UP])				Player.MoveUp(Scene.GetMap());
-	else if(keys[GLUT_KEY_DOWN])			Player.MoveDown(Scene.GetMap());
-	else if(keys[GLUT_KEY_LEFT])			Player.MoveLeft(Scene.GetMap());
-	else if(keys[GLUT_KEY_RIGHT])			Player.MoveRight(Scene.GetMap());
+	if		(keys['z'] && !Player.isAttacking())	Player.Attack();
+
+	else if (keys[GLUT_KEY_UP])						Player.MoveUp(Scene.GetMap());
+	else if (keys[GLUT_KEY_DOWN])					Player.MoveDown(Scene.GetMap());
+	else if (keys[GLUT_KEY_LEFT])					Player.MoveLeft(Scene.GetMap());
+	else if (keys[GLUT_KEY_RIGHT])					Player.MoveRight(Scene.GetMap());
 	
 	else Player.Stop();
 
@@ -118,4 +123,11 @@ void cGame::Render()
 	Octopus.Draw(Data.GetID(IMG_OCTOPUS));
 
 	glutSwapBuffers();
+}
+
+void cGame::drawBichos() 
+{
+	for (int i = 0; i < bichos.size(); ++i) {
+
+	}
 }
