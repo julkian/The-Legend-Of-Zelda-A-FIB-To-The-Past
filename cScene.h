@@ -8,19 +8,18 @@
 
 #define SCENE_Xo		0
 #define SCENE_Yo		0
-#define SCENE_WIDTH		16
-#define SCENE_HEIGHT	11
-
-#define FILENAME		"demo"
-#define FILENAME_EXT	".csv"
+#define SCENE_WIDTH		32
+#define SCENE_HEIGHT	33
 
 #define TILE_SIZE	16
 #define BLOCK_SIZE	16
 
 /*definiendo variables*/
 
-#define TILE_ROWS		10	//numero de cuadraicos por fila en el tileset
-#define TILE_COLUMNS	10	//numero de cuadraicos por columna en el tileset
+#define TILE_ROWS		12	//numero de cuadraicos por fila en el tileset
+#define TILE_COLUMN		14	//numero de cuadraicos por columna en el tileset
+#define TILE_ROWS_F		12.0f	//numero de cuadraicos por fila en el tileset
+#define TILE_COLUMN_F	14.0f	//numero de cuadraicos por columna en el tileset
 
 class cScene
 {

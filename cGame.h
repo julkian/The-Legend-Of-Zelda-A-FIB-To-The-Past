@@ -11,6 +11,10 @@
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 550
 
+#define LEVEL_HEIGHT 176 //11*16
+#define LEVEL_WIDTH 256 //16*16
+#define MENU_MARGIN 30
+
 class cGame
 {
 public:
@@ -26,6 +30,7 @@ public:
 	void ReadMouse(int button, int state, int x, int y);
 	//Process
 	bool Process();
+	void ChangeLevel();
 	//Output
 	void Render();
 
@@ -37,4 +42,5 @@ private:
 	cData Data;
 	cPlayer Player;
 	cBicho bichos[20];
+	int currentLevelX, currentLevelY;
 };
