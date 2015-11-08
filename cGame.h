@@ -41,8 +41,8 @@ private:
 	cScene Scene;
 	cData Data;
 	cPlayer Player;
-	cDog Dog;
-	cOctopus Octopus;
-	std::vector<cBicho> bichos;
+	std::vector<cOctopus> allOctopus;
+	std::vector<cDog> allDogs;
+	//std::vector<cWizard> allWizards;
 	int currentLevelX, currentLevelY;
 };
