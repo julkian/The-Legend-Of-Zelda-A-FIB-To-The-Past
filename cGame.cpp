@@ -42,19 +42,23 @@ bool cGame::Init()
 	//Enemies initialization
 	
 	//Octopus
+	cOctopus Octopus;
 	res = Data.LoadImage(IMG_OCTOPUS,"resources/charset/enemyOctopus.png",GL_RGBA);
 	if(!res) return false;
 	Octopus.SetWidthHeight(16,16);
 	Octopus.SetTile(5,5);
-	Octopus.SetWidthHeight(16,16);	
-	
+	Octopus.SetWidthHeight(16,16);
+	allOctopus.push_back(Octopus);
+
 	//Dog
+	cDog Dog;
 	res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
 	if(!res) return false;
 	Dog.SetWidthHeight(16,16);
 	Dog.SetTile(3,4);
 	Dog.SetWidthHeight(16,16);
-	Dog.SetState(STATE_LOOKRIGHT);	
+	Dog.SetState(STATE_LOOKRIGHT);
+	allDogs.push_back(Dog);
 
 	return res;
 }
@@ -92,7 +96,7 @@ bool cGame::Process()
 	if(keys[27])	res=false;	
 	
 	//Game Logic
-	if(keys['w'] && !Player.isAttacking())	Player.Attack();
+	if(keys['z'] && !Player.isAttacking())	Player.Attack();
 	else if(keys[GLUT_KEY_UP])				Player.MoveUp(Scene.GetMap());
 	else if(keys[GLUT_KEY_DOWN])			Player.MoveDown(Scene.GetMap());
 	else if(keys[GLUT_KEY_LEFT])			Player.MoveLeft(Scene.GetMap());
@@ -100,8 +104,9 @@ bool cGame::Process()
 	
 	else Player.Stop();
 
-	Dog.Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
-	Octopus.Move(Scene.GetMap());
+	for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
+	for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Move(Scene.GetMap());
+	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Move(Scene.GetMap());
 
 	ChangeLevel();
 
@@ -158,8 +163,10 @@ void cGame::Render()
 
 	Scene.Draw(Data.GetID(IMG_TILESET));
 	Player.Draw(Data.GetID(IMG_PLAYER));
-	Dog.Draw(Data.GetID(IMG_DOG));
-	Octopus.Draw(Data.GetID(IMG_OCTOPUS));
+
+	for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Draw(Data.GetID(IMG_DOG));
+	for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
+	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Draw(Data.GetID(IMG_WIZARD));
 
 	DrawMenu();
 
