@@ -1,7 +1,6 @@
 #include "cGame.h"
 #include "Globals.h"
 
-
 cGame::cGame(void)
 {
 }
@@ -162,5 +161,14 @@ void cGame::Render()
 	Dog.Draw(Data.GetID(IMG_DOG));
 	Octopus.Draw(Data.GetID(IMG_OCTOPUS));
 
+	DrawMenu();
+
 	glutSwapBuffers();
+}
+
+void cGame::DrawMenu()
+{
+	glLoadIdentity();
+	glRectf(currentLevelX, currentLevelY+LEVEL_HEIGHT+MENU_MARGIN, currentLevelX+LEVEL_WIDTH, currentLevelY+LEVEL_HEIGHT);
+
 }

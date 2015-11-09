@@ -4,13 +4,14 @@
 #include "Globals.h"
 
 //Image array size
-#define NUM_IMG		4
+#define NUM_IMG		5
 
 //Image identifiers
 #define IMG_TILESET		0
 #define IMG_PLAYER		1
 #define IMG_DOG			2
 #define IMG_OCTOPUS		3
+#define IMG_HEART		4
 /*
 #define IMG_SHOOT	4
 ...

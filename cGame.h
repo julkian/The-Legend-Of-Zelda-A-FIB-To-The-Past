@@ -31,6 +31,7 @@ public:
 	void ChangeLevel();
 	//Output
 	void Render();
+	void DrawMenu();
 
 private:
 	unsigned char keys[256];
