@@ -77,7 +77,16 @@ void cPlayer::Draw(int tex_id)
 		yf = yo - 2/3.0;
 	}
 
-	DrawRect(tex_id,xo,yo,xf,yf);
+	if (!this->invencible) DrawRect(tex_id,xo,yo,xf,yf);
+	else if (this->delayInvencible <= PLAYER_MAX_DELAY_INVENCIBLE && delayInvencible % 8 < 4)
+	{
+		DrawRect(tex_id,xo,yo,xf,yf);
+		++this->delayInvencible;
+	} else if (this->delayInvencible <= PLAYER_MAX_DELAY_INVENCIBLE && delayInvencible % 8 >= 4)
+	{
+		++this->delayInvencible;
+	}
+	else this->invencible = false;
 }
 
 void cPlayer::Attack()
@@ -129,4 +138,15 @@ void cPlayer::DrawRect(int tex_id,float xo,float yo,float xf,float yf)
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
+}
+
+void cPlayer::setInvencibility(bool invencible)
+{
+	this->invencible = invencible;
+	if (invencible) this->delayInvencible = 0;
+}
+
+bool cPlayer::isInvencible() 
+{
+	return this->invencible;
 }

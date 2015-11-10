@@ -49,7 +49,7 @@ bool cGame::Init()
 	Octopus.SetWidthHeight(16,16);
 	Octopus.SetTile(5,5);
 	Octopus.SetWidthHeight(16,16);
-	allOctopus.push_back(Octopus);
+	//allOctopus.push_back(Octopus);
 
 	//Dog
 	cDog Dog;
@@ -65,7 +65,7 @@ bool cGame::Init()
 	if (!music.openFromFile("music/overworld.ogg")) {
 		//error
 	}
-	music.play();
+	//music.play();
 
 	return res;
 }
@@ -111,13 +111,51 @@ bool cGame::Process()
 	
 	else Player.Stop();
 
-	for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
+	//for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
 	for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Move(Scene.GetMap());
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Move(Scene.GetMap());
+
+	if (!Player.isInvencible() && DetectCollisionsPlayer()) Player.setInvencibility(true);
 
 	ChangeLevel();
 
 	return res;
+}
+
+bool cGame::DetectCollisionsPlayer() 
+{
+	bool playerDamaged = false;
+	
+	for (int i = 0; !playerDamaged && i < allDogs.size(); ++i) playerDamaged = collisionBichoPlayer(&allDogs[i]);
+	for (int i = 0; !playerDamaged && i < allOctopus.size(); ++i) playerDamaged = collisionBichoPlayer(&allOctopus[i]);
+	//for (int i = 0; !playerDamaged && i < allWizards.size(); ++i) playerDamaged = collisionBichoPlayer(&allWizards[i]);
+
+	return playerDamaged;
+}
+
+bool cGame::collisionBichoPlayer(cBicho *bicho)
+{
+	int playerX, playerY, playerW, playerH;
+	int bichoX, bichoY, bichoW, bichoH;
+
+	Player.GetPosition(&playerX, &playerY);
+	Player.GetWidthHeight(&playerW, &playerH);
+
+	bicho->GetPosition(&bichoX, &bichoY);
+	bicho->GetWidthHeight(&bichoW, &bichoH);
+
+	if ((playerX <= bichoX && playerX + playerW >= bichoX) || (playerX <= bichoX+bichoW && playerX + playerW >= bichoX+bichoW))
+	{
+		if (playerY <= bichoY && playerY + playerH >= bichoY)
+		{
+			return true;
+		} else if (playerY <= bichoY+bichoH && playerY + playerH >= bichoY+bichoH)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void cGame::ChangeLevel()
@@ -169,11 +207,12 @@ void cGame::Render()
 	glLoadIdentity();
 
 	Scene.Draw(Data.GetID(IMG_TILESET));
-	Player.Draw(Data.GetID(IMG_PLAYER));
 
 	for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Draw(Data.GetID(IMG_DOG));
 	for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Draw(Data.GetID(IMG_WIZARD));
+
+	Player.Draw(Data.GetID(IMG_PLAYER));
 
 	DrawMenu();
 

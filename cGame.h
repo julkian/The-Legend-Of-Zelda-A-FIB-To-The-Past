@@ -28,9 +28,12 @@ public:
 	//Input
 	void ReadKeyboard(unsigned char key, int x, int y, bool press);
 	void ReadMouse(int button, int state, int x, int y);
+	
 	//Process
 	bool Process();
 	void ChangeLevel();
+	bool DetectCollisionsPlayer(); //collision
+
 	//Output
 	void Render();
 	void DrawMenu();
@@ -47,4 +50,7 @@ private:
 	//std::vector<cWizard> allWizards;
 	int currentLevelX, currentLevelY;
 	sf::Music music;
+
+	//methods
+	bool collisionBichoPlayer(cBicho *bicho);
 };
