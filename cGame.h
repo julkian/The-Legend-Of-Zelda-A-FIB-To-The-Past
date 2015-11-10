@@ -8,12 +8,12 @@
 #include "cBicho.h"
 #include <vector>
 
-#define GAME_WIDTH	640
-#define GAME_HEIGHT 550
+#define GAME_WIDTH		640
+#define GAME_HEIGHT		550
 
-#define LEVEL_HEIGHT 176 //11*16
-#define LEVEL_WIDTH 256 //16*16
-#define MENU_MARGIN 30
+#define LEVEL_HEIGHT	176 //11*16
+#define LEVEL_WIDTH		256 //16*16
+#define MENU_MARGIN		30
 
 class cGame
 {

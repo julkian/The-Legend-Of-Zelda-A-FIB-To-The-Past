@@ -21,6 +21,9 @@
 #define	STATE_ATTACKUP		10
 #define	STATE_ATTACKDOWN	11
 
+#define BICHO_HEALTH		2.0
+#define BICHO_DAMAGE		0.5
+
 class cRect
 {
 public:
@@ -64,23 +67,21 @@ public:
 	void NextFrame(int max);
 	int  GetFrame();
 
-	int getMaxHealth();
-	void setMaxHealth(int maxHealth);
+	float getActualHealth();
+	void setActualHealth(float actualHealth);
 
-	int getActualHealth();
-	void setActualHealth(int actualHealth);
+	void takeDamage(float damage);
+	bool isDead();
 
-	bool takeDamage(int damage);
-
-	int getDamage();
-	void setDamage(int damage);
+	float getDamage();
+	void setDamage(float damage);
 
 	float getStepLength();
 	void setStepLength(float sl);
 
 	bool isAttacking();
 	
-private:
+protected:
 	int x,y;
 	int w,h;
 	int state;
@@ -89,11 +90,10 @@ private:
 	int jump_alfa;
 	int jump_y;
 	
-	int maxHealth, actualHealth;
-	int damage;
+	float actualHealth;
+	float damage;
 
 	float stepLength;
 
-protected:
 	int seq,delay;
 };

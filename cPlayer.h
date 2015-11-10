@@ -11,6 +11,9 @@
 
 #define STEP_LENGTH					2
 
+#define PLAYER_MAX_HEALTH			3.0
+#define PLAYER_DAMAGE				1.0
+
 class cPlayer: public cBicho
 {
 public:
@@ -22,6 +25,8 @@ public:
 	void	Attack();
 	void	setInvencibility(bool invencible);
 	bool	isInvencible();
+	bool	isFullHealth();
+	float	getMaxHealth();
 
 private:
 	bool	invencible;

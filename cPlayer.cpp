@@ -4,6 +4,8 @@
 
 cPlayer::cPlayer() {
 	setStepLength(STEP_LENGTH);
+	this->damage = PLAYER_DAMAGE;
+	this->actualHealth = PLAYER_MAX_HEALTH;
 }
 cPlayer::~cPlayer(){}
 
@@ -149,4 +151,14 @@ void cPlayer::setInvencibility(bool invencible)
 bool cPlayer::isInvencible() 
 {
 	return this->invencible;
+}
+
+bool cPlayer::isFullHealth()
+{
+	return (this->actualHealth == PLAYER_MAX_HEALTH);
+}
+
+float cPlayer::getMaxHealth()
+{
+	return PLAYER_MAX_HEALTH;
 }

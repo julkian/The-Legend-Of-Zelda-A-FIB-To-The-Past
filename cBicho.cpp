@@ -17,6 +17,8 @@ cBicho::cBicho(int posx,int posy,int width,int height)
 	y = posy;
 	w = width;
 	h = height;
+	this->actualHealth = BICHO_HEALTH;
+	this->damage = BICHO_DAMAGE;
 }
 void cBicho::SetPosition(int posx,int posy)
 {
@@ -338,34 +340,28 @@ void cBicho::SetState(int s)
 	state = s;
 }
 
-int cBicho::getMaxHealth() 
-{
-	return this->maxHealth;
-}
-
-void cBicho::setMaxHealth(int maxHealth)
-{
-	this->maxHealth = maxHealth;
-}
-
-int cBicho::getActualHealth()
+float cBicho::getActualHealth()
 {
 	return this->actualHealth;
 }
 
-bool cBicho::takeDamage(int damage)
+void cBicho::takeDamage(float damage)
 {
 	this->actualHealth -= damage;
-	if (this->actualHealth <= 0) return true;
-	else return false;
 }
 
-int cBicho::getDamage()
+bool cBicho::isDead()
+{
+	if (this->actualHealth <= 0) return true;
+	return false;
+}
+
+float cBicho::getDamage()
 {
 	return this->damage;
 }
 
-void cBicho::setDamage(int damage)
+void cBicho::setDamage(float damage)
 {
 	this->damage = damage;
 }

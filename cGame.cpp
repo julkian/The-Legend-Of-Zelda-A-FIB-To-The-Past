@@ -126,9 +126,25 @@ bool cGame::DetectCollisionsPlayer()
 {
 	bool playerDamaged = false;
 	
-	for (int i = 0; !playerDamaged && i < allDogs.size(); ++i) playerDamaged = collisionBichoPlayer(&allDogs[i]);
-	for (int i = 0; !playerDamaged && i < allOctopus.size(); ++i) playerDamaged = collisionBichoPlayer(&allOctopus[i]);
-	//for (int i = 0; !playerDamaged && i < allWizards.size(); ++i) playerDamaged = collisionBichoPlayer(&allWizards[i]);
+	for (int i = 0; !playerDamaged && i < allDogs.size(); ++i) 
+	{
+			playerDamaged = collisionBichoPlayer(&allDogs[i]);
+			if (playerDamaged) Player.takeDamage(allDogs[i].getDamage());
+	}
+
+	for (int i = 0; !playerDamaged && i < allOctopus.size(); ++i) 
+	{
+		playerDamaged = collisionBichoPlayer(&allOctopus[i]);
+		if (playerDamaged) Player.takeDamage(allOctopus[i].getDamage());
+	}
+
+	/*
+	for (int i = 0; !playerDamaged && i < allWizards.size(); ++i) 
+	{
+		playerDamaged = collisionBichoPlayer(&allWizards[i]);
+		if (playerDamaged) Player.takeDamage(allWizards[i].getDamage());
+	}
+	*/
 
 	return playerDamaged;
 }
@@ -212,7 +228,7 @@ void cGame::Render()
 	for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Draw(Data.GetID(IMG_WIZARD));
 
-	Player.Draw(Data.GetID(IMG_PLAYER));
+	if (!Player.isDead()) Player.Draw(Data.GetID(IMG_PLAYER));
 
 	DrawMenu();
 
