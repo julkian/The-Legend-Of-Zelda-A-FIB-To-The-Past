@@ -115,7 +115,7 @@ bool cGame::Process()
 	for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Move(Scene.GetMap());
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Move(Scene.GetMap());
 
-	if (!Player.isInvencible() && DetectCollisionsPlayer()) Player.setInvencibility(true);
+	if (!Player.isInvincible() && DetectCollisionsPlayer()) Player.setInvincibility(true);
 
 	ChangeLevel();
 

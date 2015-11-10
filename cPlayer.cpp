@@ -79,16 +79,16 @@ void cPlayer::Draw(int tex_id)
 		yf = yo - 2/3.0;
 	}
 
-	if (!this->invencible) DrawRect(tex_id,xo,yo,xf,yf);
-	else if (this->delayInvencible <= PLAYER_MAX_DELAY_INVENCIBLE && delayInvencible % 8 < 4)
+	if (!this->invincible) DrawRect(tex_id,xo,yo,xf,yf);
+	else if (this->delayInvincible <= PLAYER_MAX_DELAY_INVENCIBLE && delayInvincible % 8 < 4)
 	{
 		DrawRect(tex_id,xo,yo,xf,yf);
-		++this->delayInvencible;
-	} else if (this->delayInvencible <= PLAYER_MAX_DELAY_INVENCIBLE && delayInvencible % 8 >= 4)
+		++this->delayInvincible;
+	} else if (this->delayInvincible <= PLAYER_MAX_DELAY_INVENCIBLE && delayInvincible % 8 >= 4)
 	{
-		++this->delayInvencible;
+		++this->delayInvincible;
 	}
-	else this->invencible = false;
+	else this->invincible = false;
 }
 
 void cPlayer::Attack()
@@ -142,15 +142,15 @@ void cPlayer::DrawRect(int tex_id,float xo,float yo,float xf,float yf)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void cPlayer::setInvencibility(bool invencible)
+void cPlayer::setInvincibility(bool invincible)
 {
-	this->invencible = invencible;
-	if (invencible) this->delayInvencible = 0;
+	this->invincible = invincible;
+	if (invincible) this->delayInvincible = 0;
 }
 
-bool cPlayer::isInvencible() 
+bool cPlayer::isInvincible() 
 {
-	return this->invencible;
+	return this->invincible;
 }
 
 bool cPlayer::isFullHealth()

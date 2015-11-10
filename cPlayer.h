@@ -23,12 +23,8 @@ public:
 	void	Draw(int tex_id);
 	void	DrawRect(int tex_id,float xo,float yo,float xf,float yf);
 	void	Attack();
-	void	setInvencibility(bool invencible);
-	bool	isInvencible();
+	void	setInvincibility(bool invincible);
+	bool	isInvincible();
 	bool	isFullHealth();
 	float	getMaxHealth();
-
-private:
-	bool	invencible;
-	int		delayInvencible;
 };
