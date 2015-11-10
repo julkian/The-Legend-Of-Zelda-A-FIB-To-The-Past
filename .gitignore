@@ -8,4 +8,7 @@
 !*.vcproj
 !*.csv
 !*.png
+!*.dll
+!*.ogg
+!music/*
 !resources/*

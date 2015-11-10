@@ -1,6 +1,7 @@
 #include "cGame.h"
 #include "Globals.h"
 
+
 cGame::cGame(void)
 {
 }
@@ -59,6 +60,12 @@ bool cGame::Init()
 	Dog.SetWidthHeight(16,16);
 	Dog.SetState(STATE_LOOKRIGHT);
 	allDogs.push_back(Dog);
+
+	//Init music
+	if (!music.openFromFile("music/overworld.ogg")) {
+		//error
+	}
+	music.play();
 
 	return res;
 }

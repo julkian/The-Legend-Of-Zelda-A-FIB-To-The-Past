@@ -46,4 +46,5 @@ private:
 	std::vector<cDog> allDogs;
 	//std::vector<cWizard> allWizards;
 	int currentLevelX, currentLevelY;
+	sf::Music music;
 };
