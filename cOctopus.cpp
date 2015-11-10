@@ -7,6 +7,8 @@ cOctopus::cOctopus() {
 	else if (randDirection < 75)	SetState(STATE_LOOKDOWN);
 	else							SetState(STATE_LOOKRIGHT);
 	setStepLength(STEP_LENGTH);
+	this->damage = OCTOPUS_DAMAGE;
+	this->actualHealth = OCTOPUS_MAX_HEALTH;
 }
 cOctopus::~cOctopus(){}
 

@@ -5,6 +5,9 @@
 #define PLAYER_START_CX			5
 #define PLAYER_START_CY			5
 
+#define OCTOPUS_MAX_HEALTH		2.0
+#define OCTOPUS_DAMAGE			0.5
+
 #define CHANGE_DIRECTION_CHANCE	2
 
 #define STEP_LENGTH				1
