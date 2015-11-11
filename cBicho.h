@@ -85,10 +85,6 @@ protected:
 	int x,y;
 	int w,h;
 	int state;
-
-	bool jumping;
-	int jump_alfa;
-	int jump_y;
 	
 	float actualHealth;
 	float damage;
@@ -96,4 +92,8 @@ protected:
 	float stepLength;
 
 	int seq,delay;
+	
+	bool	invincible;
+	int		delayInvincible;
+
 };
