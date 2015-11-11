@@ -419,6 +419,7 @@ bool cBicho::manageInvincibility()
 bool cBicho::isInvincible() 
 {
 	return this->invincible;
+}
 
 bool cBicho::isTileWall(int tileId)
 {

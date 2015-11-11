@@ -23,5 +23,5 @@ public:
 	void	Attack();
 	bool	isFullHealth();
 	float	getMaxHealth();
-	bool isTileWall(int tileId);
+	bool	isTileWall(int tileId);
 };
