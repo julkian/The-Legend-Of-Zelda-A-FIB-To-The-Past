@@ -91,19 +91,45 @@ void cPlayer::Draw(int tex_id)
 	else this->invincible = false;
 }
 
-void cPlayer::Attack()
+void cPlayer::Attack(std::vector<cSword> &allSwords)
 {
 	int state = GetState();
+	int stateSword = STATE_WALKRIGHT;
+	int offsetX = 0;
+	int offsetY = 0;
 	if (state == STATE_LOOKLEFT || state == STATE_WALKLEFT) {
 		SetState(STATE_ATTACKLEFT);
+		stateSword = STATE_WALKLEFT;
+		offsetX = -10;
 	} else if (state == STATE_LOOKRIGHT || state == STATE_WALKRIGHT) {
 		SetState(STATE_ATTACKRIGHT);
+		stateSword = STATE_WALKRIGHT;
+		offsetX = 10;
+		offsetY = -1;
 	} else if (state == STATE_LOOKDOWN || state == STATE_WALKDOWN) {
 		SetState(STATE_ATTACKDOWN);
+		stateSword = STATE_WALKDOWN;
+		offsetX = 3;
+		offsetY = -10;
 	} else if (state == STATE_LOOKUP || state == STATE_WALKUP) {
 		SetState(STATE_ATTACKUP);
+		stateSword = STATE_WALKUP;
+		offsetX = 1;
+		offsetY = 10;
 	}
 
+	//create the sword bullet if maxHealth
+	if (actualHealth == PLAYER_MAX_HEALTH) {
+		int posX, posY;
+		this->GetPosition(&posX, &posY);
+
+		cSword Sword;
+		Sword.SetWidthHeight(16,16);
+		Sword.SetPosition(posX+ offsetX,posY+ offsetY);
+		Sword.SetWidthHeight(16,16);
+		Sword.SetState(stateSword);
+		allSwords.push_back(Sword);
+	}
 	seq = 0;
 	delay = 0;
 }
