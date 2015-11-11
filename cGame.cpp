@@ -31,6 +31,10 @@ bool cGame::Init()
 	res = Scene.LoadLevel(1);
 	if(!res) return false;
 
+	//Heart initialization
+	res = Data.LoadImage(IMG_HEART,"resources/charset/heart.png",GL_RGBA);
+	if(!res) return false;
+
 	//Player initialization
 
 	res = Data.LoadImage(IMG_PLAYER,"resources/charset/link.png",GL_RGBA);
@@ -56,7 +60,7 @@ bool cGame::Init()
 	res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
 	if(!res) return false;
 	Dog.SetWidthHeight(16,16);
-	Dog.SetTile(3,4);
+	Dog.SetTile(10,2);
 	Dog.SetWidthHeight(16,16);
 	Dog.SetState(STATE_LOOKRIGHT);
 	allDogs.push_back(Dog);
@@ -237,7 +241,44 @@ void cGame::Render()
 
 void cGame::DrawMenu()
 {
-	glLoadIdentity();
+	//Menu panel
+	glColor3f(0.0f,0.0f,0.0f);
 	glRectf(currentLevelX, currentLevelY+LEVEL_HEIGHT+MENU_MARGIN, currentLevelX+LEVEL_WIDTH, currentLevelY+LEVEL_HEIGHT);
 
+	glColor3f(1.0,1.0,1.0); 
+
+	//Draw Hearts
+
+	float playerHealth = Player.getActualHealth();
+	
+	float xo = 0.0;
+	float xf;
+	float yo = 1.0;
+	float yf = 0.0;
+
+	glEnable(GL_TEXTURE_2D);
+	
+	glBindTexture(GL_TEXTURE_2D,Data.GetID(IMG_HEART));
+
+	for (int i=0; i<3; ++i) {
+		if (playerHealth >= 1.0) {
+			//pintar sencer
+			xo = 0.0;
+		} else if (playerHealth >= 0.5) {
+			//pintar mig
+			xo = 1/3.0;
+		} else {
+			//pintar buit
+			xo = 2/3.0;
+		}
+		xf = xo + 1/3.0;
+		glBegin(GL_QUADS);	
+			glTexCoord2f(xo,yo);	glVertex2i(currentLevelX + LEVEL_WIDTH/2 + (16*(i-1)), currentLevelY + LEVEL_HEIGHT + 7);
+			glTexCoord2f(xf,yo);	glVertex2i(currentLevelX + LEVEL_WIDTH/2 + (16*i)	, currentLevelY + LEVEL_HEIGHT + 7);
+			glTexCoord2f(xf,yf);	glVertex2i(currentLevelX + LEVEL_WIDTH/2 + (16*i)	, currentLevelY + LEVEL_HEIGHT + 7 + 16);
+			glTexCoord2f(xo,yf);	glVertex2i(currentLevelX + LEVEL_WIDTH/2 + (16*(i-1)), currentLevelY + LEVEL_HEIGHT + 7 + 16);
+		glEnd();
+		--playerHealth;
+	}
+	glDisable(GL_TEXTURE_2D);
 }
