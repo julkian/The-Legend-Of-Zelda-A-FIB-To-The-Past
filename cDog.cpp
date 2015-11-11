@@ -33,7 +33,7 @@ void cDog::Draw(int tex_id)
 								NextFrame(2);
 								break;
 		//4..6
-		case STATE_WALKRIGHT:	xo = 0.75f + (GetFrame()*0.125f);;
+		case STATE_WALKRIGHT:	xo = 0.75f + (GetFrame()*0.125f);
 								NextFrame(2);
 								break;
 		//1..3
@@ -41,14 +41,16 @@ void cDog::Draw(int tex_id)
 								NextFrame(2);
 								break;
 		//4..6
-		case STATE_WALKDOWN:	xo = 0.0f + (GetFrame()*0.125f);;
+		case STATE_WALKDOWN:	xo = 0.0f + (GetFrame()*0.125f);
 								NextFrame(2);
 								break;
 	}
 	xf = xo + 0.125f;
 	yf = 0.0f;
 
-	DrawRect(tex_id,xo,yo,xf,yf);
+	bool haveToBeDrawn = manageInvincibility();
+
+	if (haveToBeDrawn) DrawRect(tex_id,xo,yo,xf,yf);
 }
 
 void cDog::Move(int *map, int playerX, int playerY)

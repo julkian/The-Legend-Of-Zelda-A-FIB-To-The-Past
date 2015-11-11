@@ -30,7 +30,9 @@ void cOctopus::Draw(int tex_id)
 	xf = xo + distanceBetweenSprites;
 	yf = 0.0f;
 
-	DrawRect(tex_id,xo,yo,xf,yf);
+	bool haveToBeDrawn = manageInvincibility();
+
+	if (haveToBeDrawn) DrawRect(tex_id,xo,yo,xf,yf);
 }
 
 void cOctopus::Move(int *map)
