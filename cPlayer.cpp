@@ -144,3 +144,11 @@ float cPlayer::getMaxHealth()
 {
 	return PLAYER_MAX_HEALTH;
 }
+
+bool cPlayer::isTileWall(int tileId) 
+{
+	if(tileId != 0 && tileId != 119 && tileId != 85 && tileId != 64 && tileId != 78 && tileId != 91 && tileId != 106 && tileId != 131 && tileId != 132 && tileId != 134 && tileId != 135)		{
+		return true; // overworld floor, dungeon floor and doors
+	}
+	return false;
+}

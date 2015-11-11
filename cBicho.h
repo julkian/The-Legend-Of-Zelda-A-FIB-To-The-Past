@@ -94,6 +94,8 @@ public:
 	bool isInvincible();
 
 	bool manageInvincibility();
+
+	virtual bool isTileWall(int tileId);
 	
 protected:
 	int x,y;
