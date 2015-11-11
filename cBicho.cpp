@@ -345,8 +345,12 @@ float cBicho::getActualHealth()
 	return this->actualHealth;
 }
 
-void cBicho::takeDamage(float damage)
+void cBicho::takeDamage(float damage, char *pushSide)
 {
+	this->invincible = true;
+	this->delayInvincible = 0;
+	this->isBeingPushed = true;
+	this->pushOffset = 0;
 	this->actualHealth -= damage;
 }
 
@@ -395,6 +399,26 @@ bool cBicho::isAttacking()
 	if (state == STATE_ATTACKLEFT || state == STATE_ATTACKRIGHT || state == STATE_ATTACKUP || state == STATE_ATTACKDOWN) return true;
 
 	return false;
+}
+
+bool cBicho::manageInvincibility()
+{
+	bool haveToBeDrawn = false;
+
+	if (!this->invincible) haveToBeDrawn = true;
+	else if (this->delayInvincible <= BICHO_MAX_DELAY_INVENCIBLE && delayInvincible % 8 < 4)
+	{
+		++this->delayInvincible;
+		haveToBeDrawn = true;
+	} else if (this->delayInvincible <= BICHO_MAX_DELAY_INVENCIBLE && delayInvincible % 8 >= 4) ++this->delayInvincible;
+	else this->invincible = false;
+
+	return haveToBeDrawn;
+}
+
+bool cBicho::isInvincible() 
+{
+	return this->invincible;
 }
 
 bool cBicho::isTileWall(int tileId)

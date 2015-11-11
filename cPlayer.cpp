@@ -79,16 +79,9 @@ void cPlayer::Draw(int tex_id)
 		yf = yo - 2/3.0;
 	}
 
-	if (!this->invincible) DrawRect(tex_id,xo,yo,xf,yf);
-	else if (this->delayInvincible <= PLAYER_MAX_DELAY_INVENCIBLE && delayInvincible % 8 < 4)
-	{
-		DrawRect(tex_id,xo,yo,xf,yf);
-		++this->delayInvincible;
-	} else if (this->delayInvincible <= PLAYER_MAX_DELAY_INVENCIBLE && delayInvincible % 8 >= 4)
-	{
-		++this->delayInvincible;
-	}
-	else this->invincible = false;
+	bool haveToBeDrawn = manageInvincibility();
+
+	if (haveToBeDrawn) DrawRect(tex_id,xo,yo,xf,yf);
 }
 
 void cPlayer::Attack(std::vector<cSword> &allSwords)
@@ -166,17 +159,6 @@ void cPlayer::DrawRect(int tex_id,float xo,float yo,float xf,float yf)
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
-}
-
-void cPlayer::setInvincibility(bool invincible)
-{
-	this->invincible = invincible;
-	if (invincible) this->delayInvincible = 0;
-}
-
-bool cPlayer::isInvincible() 
-{
-	return this->invincible;
 }
 
 bool cPlayer::isFullHealth()

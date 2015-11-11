@@ -3,26 +3,36 @@
 #include "cTexture.h"
 #include "Globals.h"
 
-#define FRAME_DELAY			8
-#define ATTACK_FRAME_DELAY	16
+#define FRAME_DELAY					8
+#define ATTACK_FRAME_DELAY			16
 
-#define STATE_LOOKLEFT		0
-#define STATE_LOOKRIGHT		1
-#define STATE_LOOKUP		2
-#define STATE_LOOKDOWN		3
+#define STATE_LOOKLEFT				0
+#define STATE_LOOKRIGHT				1
+#define STATE_LOOKUP				2
+#define STATE_LOOKDOWN				3
 
-#define STATE_WALKLEFT		4
-#define STATE_WALKRIGHT		5
-#define STATE_WALKUP		6
-#define STATE_WALKDOWN		7
+#define STATE_WALKLEFT				4
+#define STATE_WALKRIGHT				5
+#define STATE_WALKUP				6
+#define STATE_WALKDOWN				7
 
-#define STATE_ATTACKLEFT	8
-#define STATE_ATTACKRIGHT	9
-#define	STATE_ATTACKUP		10
-#define	STATE_ATTACKDOWN	11
+#define STATE_ATTACKLEFT			8
+#define STATE_ATTACKRIGHT			9
+#define	STATE_ATTACKUP				10
+#define	STATE_ATTACKDOWN			11
 
-#define BICHO_HEALTH		2.0
-#define BICHO_DAMAGE		0.5
+#define BICHO_MAX_DELAY_INVENCIBLE	48
+
+#define BICHO_HEALTH				2.0
+#define BICHO_DAMAGE				0.5
+#define BICHO_PUSH_DAMAGE_DELAY		20		//frames delay when is taking damage
+#define BICHO_PUSH_DAMAGE_OFFSET	24
+
+#define PUSH_LEFT					'l'
+#define PUSH_UP						'u'
+#define PUSH_DOWN					'd'
+#define PUSH_RIGHT					'r'
+
 
 class cRect
 {
@@ -70,7 +80,7 @@ public:
 	float getActualHealth();
 	void setActualHealth(float actualHealth);
 
-	void takeDamage(float damage);
+	void takeDamage(float damage, char *pushSide);
 	bool isDead();
 
 	float getDamage();
@@ -80,6 +90,10 @@ public:
 	void setStepLength(float sl);
 
 	bool isAttacking();
+
+	bool isInvincible();
+
+	bool manageInvincibility();
 
 	virtual bool isTileWall(int tileId);
 	
@@ -98,4 +112,7 @@ protected:
 	bool	invincible;
 	int		delayInvincible;
 
+	bool	isBeingPushed;
+	int		pushOffset;
+	char	pushSide;
 };

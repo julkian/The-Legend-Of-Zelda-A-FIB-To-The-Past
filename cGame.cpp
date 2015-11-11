@@ -72,7 +72,7 @@ bool cGame::Init()
 	res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
 	if(!res) return false;
 	Dog.SetWidthHeight(16,16);
-	Dog.SetTile(10,2);
+	Dog.SetTile(5,5);
 	Dog.SetWidthHeight(16,16);
 	Dog.SetState(STATE_LOOKRIGHT);
 	allDogs.push_back(Dog);
@@ -130,10 +130,10 @@ bool cGame::Process()
 	for (int i = 0; i < allSwords.size(); ++i) allSwords[i].Move(Scene.GetMap());
 
 	//for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
-	for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Move(Scene.GetMap());
+	//for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Move(Scene.GetMap());
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Move(Scene.GetMap());
 
-	if (!Player.isInvincible() && DetectCollisionsPlayer()) Player.setInvincibility(true);
+	if (!Player.isInvincible()) DetectCollisionsPlayer();
 
 	ChangeLevel();
 
@@ -143,31 +143,32 @@ bool cGame::Process()
 bool cGame::DetectCollisionsPlayer() 
 {
 	bool playerDamaged = false;
-	
+	char pushSide;
+
 	for (int i = 0; !playerDamaged && i < allDogs.size(); ++i) 
 	{
-			playerDamaged = collisionBichoPlayer(&allDogs[i]);
-			if (playerDamaged) Player.takeDamage(allDogs[i].getDamage());
+			playerDamaged = collisionBichoPlayer(&allDogs[i], &pushSide);
+			if (playerDamaged) Player.takeDamage(allDogs[i].getDamage(), &pushSide);
 	}
 
 	for (int i = 0; !playerDamaged && i < allOctopus.size(); ++i) 
 	{
-		playerDamaged = collisionBichoPlayer(&allOctopus[i]);
-		if (playerDamaged) Player.takeDamage(allOctopus[i].getDamage());
+		playerDamaged = collisionBichoPlayer(&allOctopus[i], &pushSide);
+		if (playerDamaged) Player.takeDamage(allOctopus[i].getDamage(), &pushSide);
 	}
 
 	/*
 	for (int i = 0; !playerDamaged && i < allWizards.size(); ++i) 
 	{
-		playerDamaged = collisionBichoPlayer(&allWizards[i]);
-		if (playerDamaged) Player.takeDamage(allWizards[i].getDamage());
+		playerDamaged = collisionBichoPlayer(&allWizards[i], &pushSide););
+		if (playerDamaged) Player.takeDamage(allWizards[i].getDamage(), pushSide););
 	}
 	*/
 
 	return playerDamaged;
 }
 
-bool cGame::collisionBichoPlayer(cBicho *bicho)
+bool cGame::collisionBichoPlayer(cBicho *bicho, char * pushSide)
 {
 	int playerX, playerY, playerW, playerH;
 	int bichoX, bichoY, bichoW, bichoH;
@@ -178,17 +179,45 @@ bool cGame::collisionBichoPlayer(cBicho *bicho)
 	bicho->GetPosition(&bichoX, &bichoY);
 	bicho->GetWidthHeight(&bichoW, &bichoH);
 
-	if ((playerX <= bichoX && playerX + playerW >= bichoX) || (playerX <= bichoX+bichoW && playerX + playerW >= bichoX+bichoW))
+	int playerSteplength = Player.getStepLength();
+
+	if (playerY == bichoY+bichoH && ((playerX <= bichoX && playerX+playerW >= bichoX) || (playerX >= bichoX && playerX+playerW >= bichoX)))
 	{
-		if (playerY <= bichoY && playerY + playerH >= bichoY)
+		int auxPlayerY = playerY - playerSteplength;
+		if (auxPlayerY <= bichoY+bichoH && ((playerX <= bichoX && playerX+playerW >= bichoX) || (playerX <= bichoX+bichoW && playerX+playerW >= bichoX)))
 		{
+			//collision up
+			*pushSide = 'u';
 			return true;
-		} else if (playerY <= bichoY+bichoH && playerY + playerH >= bichoY+bichoH)
+		}
+	} else if (playerY+playerH == bichoY && ((playerX <= bichoX && playerX+playerW >= bichoX) || (playerX <= bichoX+bichoW && playerX+playerW >= bichoX)))
+	{
+		int auxPlayerY = playerY + playerSteplength;
+		if (auxPlayerY + playerH >= bichoY && ((playerX <= bichoX && playerX+playerW >= bichoX) || (playerX <= bichoX+bichoW && playerX+playerW >= bichoX)))
 		{
+			//collision down
+			*pushSide = 'd';
+			return true;
+		}
+	} else if (playerX+playerW == bichoX && ((playerY <= bichoY && playerY+playerH >= bichoY) || (playerY <= bichoY+bichoH && playerY+playerH >= bichoY+bichoH)))
+	{
+		int auxPlayerX = playerX - playerSteplength;
+		if (auxPlayerX+playerW <= bichoX && ((playerY <= bichoY && playerY+playerH >= bichoY) || (playerY <= bichoY+bichoH && playerY+playerH >= bichoY+bichoH)))
+		{
+			//collision left
+			*pushSide = 'l';
+			return true;
+		}
+	} else if (playerX == bichoX+bichoW && ((playerY <= bichoY && playerY+playerH >= bichoY) || (playerY <= bichoY+bichoH && playerY+playerH >= bichoY+bichoH)))
+	{
+		int auxPlayerX = playerX + playerSteplength;
+		if (playerX >= bichoX+bichoW && ((playerY <= bichoY && playerY+playerH >= bichoY) || (playerY <= bichoY+bichoH && playerY+playerH >= bichoY+bichoH)))
+		{
+			//collision right
+			*pushSide = 'r';
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -243,7 +272,7 @@ void cGame::Render()
 	Scene.Draw(Data.GetID(IMG_TILESET));
 
 	for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Draw(Data.GetID(IMG_DOG));
-	for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
+	//for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Draw(Data.GetID(IMG_WIZARD));
 
 	if (!Player.isDead()) Player.Draw(Data.GetID(IMG_PLAYER));

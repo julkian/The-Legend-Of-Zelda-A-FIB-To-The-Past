@@ -6,8 +6,6 @@
 #define PLAYER_START_CX				3
 #define PLAYER_START_CY				2
 
-#define PLAYER_MAX_DELAY_INVENCIBLE	48
-
 #define ATTACK_DELAY				20
 
 #define STEP_LENGTH					2
@@ -25,8 +23,7 @@ public:
 	void	DrawRect(int tex_id,float xo,float yo,float xf,float yf);
 	void	Attack(std::vector<cSword> &allSwords);
 	void	setInvincibility(bool invincible);
-	bool	isInvincible();
 	bool	isFullHealth();
 	float	getMaxHealth();
-	bool isTileWall(int tileId);
+	bool	isTileWall(int tileId);
 };

@@ -54,5 +54,5 @@ private:
 	sf::Music music;
 
 	//methods
-	bool collisionBichoPlayer(cBicho *bicho);
+	bool collisionBichoPlayer(cBicho *bicho, char * pushSide);
 };
