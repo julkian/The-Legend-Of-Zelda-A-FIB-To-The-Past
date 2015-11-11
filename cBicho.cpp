@@ -74,11 +74,12 @@ bool cBicho::CollidesMapWall(int *map,bool right)
 	if( (y % TILE_SIZE) != 0) height_tiles++;
 
 	if(right)	tile_x += width_tiles;
+	else tile_x = (x-stepLength)/TILE_SIZE;
 	
 	for(j=0;j<height_tiles;j++)
 	{
 		int tileId = map[ tile_x + ((tile_y+j)*SCENE_WIDTH) ];
-		if(tileId != 0 && tileId != 85 && tileId != 119)		{
+		if(this->isTileWall(tileId))		{
 			return true; // overworld floor, overworld dungeon door, dungeon floor
 		}
 	}
@@ -106,12 +107,12 @@ bool cBicho::CollidesMapFloor(int *map, bool down)
 		if (down) {
 			if( (y % TILE_SIZE) == 0 )
 			{
-				if(map[ (tile_x + i) + ((tile_y - 1) * SCENE_WIDTH) ] != 0)
+				if(this->isTileWall(map[ (tile_x + i) + ((tile_y - 1) * SCENE_WIDTH) ]))
 					on_base = true;
 			}
 			else
 			{
-				if(map[ (tile_x + i) + (tile_y * SCENE_WIDTH) ] != 0)
+				if(this->isTileWall(map[ (tile_x + i) + (tile_y * SCENE_WIDTH) ]))
 				{
 					y = (tile_y + 1) * TILE_SIZE;
 					on_base = true;
@@ -120,12 +121,12 @@ bool cBicho::CollidesMapFloor(int *map, bool down)
 		} else {
 			if( (y % TILE_SIZE) == 0 )
 			{
-				if(map[ (tile_x + i) + ((tile_y + 1) * SCENE_WIDTH) ] != 0)
+				if(this->isTileWall(map[ (tile_x + i) + ((tile_y + 1) * SCENE_WIDTH) ]))
 					on_base = true;
 			}
 			else
 			{
-				if(map[ (tile_x + i) + (tile_y * SCENE_WIDTH) ] != 0)
+				if(this->isTileWall(map[ (tile_x + i) + (tile_y * SCENE_WIDTH) ]))
 				{
 					y = (tile_y - 1) * TILE_SIZE;
 					on_base = true;
@@ -166,6 +167,7 @@ void cBicho::DrawRect(int tex_id,float xo,float yo,float xf,float yf)
 
 void cBicho::MoveLeft(int *map)
 {	
+	std::cout << x << std::endl;
 	if(CollidesMapWall(map,false))
 	{
 		state = STATE_LOOKLEFT;
@@ -392,5 +394,13 @@ bool cBicho::isAttacking()
 {
 	if (state == STATE_ATTACKLEFT || state == STATE_ATTACKRIGHT || state == STATE_ATTACKUP || state == STATE_ATTACKDOWN) return true;
 
+	return false;
+}
+
+bool cBicho::isTileWall(int tileId)
+{
+	if(tileId != 0 && tileId != 119)		{
+		return true; // overworld floor, dungeon floor
+	}
 	return false;
 }

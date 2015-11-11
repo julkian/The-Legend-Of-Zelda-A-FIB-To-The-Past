@@ -27,4 +27,5 @@ public:
 	bool	isInvincible();
 	bool	isFullHealth();
 	float	getMaxHealth();
+	bool isTileWall(int tileId);
 };

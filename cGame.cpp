@@ -1,6 +1,6 @@
 #include "cGame.h"
 #include "Globals.h"
-
+//#include "windows.h"
 
 cGame::cGame(void)
 {
@@ -77,7 +77,7 @@ bool cGame::Init()
 bool cGame::Loop()
 {
 	bool res=true;
-
+	//Sleep(30);
 	res = Process();
 	if(res) Render();
 
@@ -184,7 +184,7 @@ void cGame::ChangeLevel()
 	int tileY;
 	Player.GetTile(&tileX, &tileY);
 	int state = Player.GetState();
-	if (tileX == 8 || tileX == 9) {
+	if (tileX == 7 || tileX == 8) {
 		if (tileY == 11 && state == 6) { // 1 -> 2
 			currentLevelY = LEVEL_HEIGHT;
 		} else if (tileY == 12 && state == 7) { // 2 -> 1

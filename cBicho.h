@@ -80,6 +80,8 @@ public:
 	void setStepLength(float sl);
 
 	bool isAttacking();
+
+	virtual bool isTileWall(int tileId);
 	
 protected:
 	int x,y;
