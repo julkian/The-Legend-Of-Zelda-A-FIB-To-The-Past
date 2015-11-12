@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cBicho.h"
+#include "cSword.h"
 
 #define PLAYER_START_CX				3
 #define PLAYER_START_CY				2
@@ -20,7 +21,8 @@ public:
 
 	void	Draw(int tex_id);
 	void	DrawRect(int tex_id,float xo,float yo,float xf,float yf);
-	void	Attack();
+	void	Attack(std::vector<cSword> &allSwords);
+	void	setInvincibility(bool invincible);
 	bool	isFullHealth();
 	float	getMaxHealth();
 	bool	isTileWall(int tileId);

@@ -2,6 +2,7 @@
 
 #include "cScene.h"
 #include "cData.h"
+#include "cSword.h"
 #include "cPlayer.h"
 #include "cDog.h"
 #include "cOctopus.h"
@@ -45,6 +46,7 @@ private:
 	cScene Scene;
 	cData Data;
 	cPlayer Player;
+	std::vector<cSword> allSwords;
 	std::vector<cOctopus> allOctopus;
 	std::vector<cDog> allDogs;
 	//std::vector<cWizard> allWizards;

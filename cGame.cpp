@@ -1,6 +1,6 @@
 #include "cGame.h"
 #include "Globals.h"
-//#include "windows.h"
+#include "windows.h"
 
 cGame::cGame(void)
 {
@@ -44,6 +44,18 @@ bool cGame::Init()
 	Player.SetWidthHeight(16,16);
 	Player.SetState(STATE_LOOKRIGHT);
 
+	//Sword initialization
+
+	res = Data.LoadImage(IMG_SWORD,"resources/charset/sword.png",GL_RGBA);
+	if(!res) return false;
+	/*
+	cSword Sword;
+	Sword.SetWidthHeight(16,16);
+	Sword.SetTile(3,3);
+	Sword.SetWidthHeight(16,16);
+	Sword.SetState(STATE_WALKRIGHT);
+	allSwords.push_back(Sword); */
+
 	//Enemies initialization
 	
 	//Octopus
@@ -77,7 +89,7 @@ bool cGame::Init()
 bool cGame::Loop()
 {
 	bool res=true;
-	//Sleep(30);
+	Sleep(30);
 	res = Process();
 	if(res) Render();
 
@@ -108,13 +120,15 @@ bool cGame::Process()
 	
 	//Game Logic
 	if (Player.isBeingPushed())					Player.pushMove(Scene.GetMap());
-	else if(keys['z'] && !Player.isAttacking())	Player.Attack();
+	else if(keys['z'] && !Player.isAttacking())	Player.Attack(allSwords);
 	else if(keys[GLUT_KEY_UP])					Player.MoveUp(Scene.GetMap());
 	else if(keys[GLUT_KEY_DOWN])				Player.MoveDown(Scene.GetMap());
 	else if(keys[GLUT_KEY_LEFT])				Player.MoveLeft(Scene.GetMap());
 	else if(keys[GLUT_KEY_RIGHT])				Player.MoveRight(Scene.GetMap());
 	
 	else Player.Stop();
+
+	for (int i = 0; i < allSwords.size(); ++i) allSwords[i].Move(Scene.GetMap());
 
 	//for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
 	//for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Move(Scene.GetMap());
@@ -263,6 +277,7 @@ void cGame::Render()
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Draw(Data.GetID(IMG_WIZARD));
 
 	if (!Player.isDead()) Player.Draw(Data.GetID(IMG_PLAYER));
+	for (int i = 0; i < allSwords.size(); ++i) allSwords[i].Draw(Data.GetID(IMG_SWORD));
 
 	DrawMenu();
 
