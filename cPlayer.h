@@ -24,4 +24,5 @@ public:
 	bool	isFullHealth();
 	float	getMaxHealth();
 	bool	isTileWall(int tileId);
+	void	pushMove(int *map);
 };

@@ -152,3 +152,61 @@ bool cPlayer::isTileWall(int tileId)
 	}
 	return false;
 }
+
+void cPlayer::pushMove(int *map)
+{
+	int movement = BICHO_PUSH_DAMAGE_OFFSET / BICHO_PUSH_DAMAGE_DELAY;
+	switch (this->pushSide)
+	{
+		case 'u':
+				for (int i = movement; i > 0; i -= 2) 
+				{
+					this->y += i;
+					if (CollidesMapFloor(map, false))
+					{	
+						this->y -= i;
+						this->pushOffset = BICHO_PUSH_DAMAGE_OFFSET;
+					}  else i = -1;
+				}
+			break;
+		case 'd':
+				for (int i = movement; i > 0; i -= 2) 
+				{
+					this->y -= i;
+					if (CollidesMapFloor(map, true))
+					{	
+						this->y += i;
+						this->pushOffset = BICHO_PUSH_DAMAGE_OFFSET;
+					} else i = -1;
+				}
+			break;
+		case 'l':
+				for (int i = movement; i > 0; i -= 2) 
+				{
+					this->x -= i;
+					if (CollidesMapWall(map, false))
+					{
+						this->x += i;
+						this->pushOffset = BICHO_PUSH_DAMAGE_OFFSET;
+					} else i = -1;
+				}
+			break;
+		case 'r':
+				for (int i = movement; i > 0; i -= 2) 
+				{
+					this->x += i;
+					if (CollidesMapWall(map, true))
+					{
+						this->x -= i;
+						this->pushOffset = BICHO_PUSH_DAMAGE_OFFSET;
+					} else i = -1;
+				}
+			break;
+	}
+	this->pushOffset += movement;
+	if (this->pushOffset >= BICHO_PUSH_DAMAGE_OFFSET)
+	{
+		this->beingPushed = false;
+		this->pushOffset = 0;
+	}
+}
