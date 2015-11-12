@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cBicho.h"
+#include "cBall.h"
 
 #define PLAYER_START_CX			5
 #define PLAYER_START_CY			5
@@ -21,6 +22,13 @@ public:
 	~cOctopus();
 
 	void Draw(int tex_id);
-	void Move(int *map);
+	void Move(int *map, int playerX, int playerY);
 	int newDirection(int oldState);
+	cBall* getBall();
+	bool hasBall();
+	void setHasBall(bool isBall);
+
+private:
+	cBall Ball;
+	bool isBall;
 };

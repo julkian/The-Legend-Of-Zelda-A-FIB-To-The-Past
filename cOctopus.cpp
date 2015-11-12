@@ -9,6 +9,7 @@ cOctopus::cOctopus() {
 	setStepLength(STEP_LENGTH);
 	this->damage = OCTOPUS_DAMAGE;
 	this->actualHealth = OCTOPUS_MAX_HEALTH;
+	isBall = false;
 }
 cOctopus::~cOctopus(){}
 
@@ -35,17 +36,72 @@ void cOctopus::Draw(int tex_id)
 	if (haveToBeDrawn) DrawRect(tex_id,xo,yo,xf,yf);
 }
 
-void cOctopus::Move(int *map)
+void cOctopus::Move(int *map, int playerX, int playerY)
 {
 	int state = GetState();
 
 	if (rand() % 100 <= CHANGE_DIRECTION_CHANCE) state = newDirection(state);
 	SetState(state);
 
-	if (state == STATE_LOOKLEFT || state == STATE_WALKLEFT)			MoveLeft(map);
-	else if (state == STATE_LOOKRIGHT || state == STATE_WALKRIGHT)	MoveRight(map);
-	else if (state == STATE_LOOKDOWN || state == STATE_WALKDOWN)	MoveDown(map);
-	else if (state == STATE_LOOKUP || state == STATE_WALKUP)		MoveUp(map);
+	bool shoot = false;
+	int ballState = 0;
+
+	if (state == STATE_LOOKLEFT || state == STATE_WALKLEFT)			{
+		if (!isBall && playerX < x && ((playerY >= y && playerY <= y+h) || (playerY+h >= y && playerY+h <= y+h)) ) {
+			shoot = true;
+			ballState = STATE_WALKLEFT;
+		} else {
+			MoveLeft(map);
+		}
+	}
+	else if (state == STATE_LOOKRIGHT || state == STATE_WALKRIGHT)	{
+		if (!isBall && playerX > x && ((playerY >= y && playerY <= y+h) || (playerY+h >= y && playerY+h <= y+h)) ) {
+			shoot = true;
+			ballState = STATE_WALKRIGHT;
+		} else {
+			MoveRight(map);
+		}
+	}
+	else if (state == STATE_LOOKDOWN || state == STATE_WALKDOWN)	{
+		if (!isBall && playerY < y && ((playerX >= x && playerX <= x+w) || (playerX+w >= x && playerX+w <= x+w))) {
+			shoot = true;
+			ballState = STATE_WALKDOWN;
+		} else {
+			MoveDown(map);
+		}
+	}
+	else if (state == STATE_LOOKUP || state == STATE_WALKUP)		{
+		if (!isBall && playerY > y && ((playerX >= x && playerX <= x+w) || (playerX+w >= x && playerX+w <= x+w))) {
+			shoot = true;
+			ballState = STATE_WALKUP;
+		} else {
+			MoveUp(map);
+		}
+	}
+
+	int rnd = rand() % 10 + 1;     // v2 in the range 1 to 100
+	if (shoot && rnd > 9) {
+		isBall = true;
+		Ball.SetWidthHeight(16,16);
+		Ball.SetPosition(x,y);
+		Ball.SetWidthHeight(16,16);
+		Ball.SetState(ballState);
+	}
+}
+
+cBall* cOctopus::getBall()
+{
+	return &Ball;
+}
+
+void cOctopus::setHasBall(bool isBall) 
+{
+	this->isBall = isBall;
+}
+
+bool cOctopus::hasBall()
+{
+	return this->isBall;
 }
 
 int cOctopus::newDirection(int oldState){

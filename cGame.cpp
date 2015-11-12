@@ -58,7 +58,7 @@ bool cGame::Init()
 	Octopus.SetWidthHeight(16,16);
 	Octopus.SetTile(5,5);
 	Octopus.SetWidthHeight(16,16);
-	//allOctopus.push_back(Octopus);
+	allOctopus.push_back(Octopus);
 
 	//Dog
 	cDog Dog;
@@ -126,7 +126,7 @@ bool cGame::Process()
 	for (int i = 0; i < allSwords.size(); ++i) {
 		allSwords[i].Move(Scene.GetMap());
 		int state = allSwords[i].GetState();
-		if (allSwords[i].GetState() != STATE_WALKRIGHT && allSwords[i].GetState() != STATE_WALKLEFT && allSwords[i].GetState() != STATE_WALKUP && allSwords[i].GetState() != STATE_WALKDOWN) {
+		if (state != STATE_WALKRIGHT && state != STATE_WALKLEFT && state != STATE_WALKUP && state != STATE_WALKDOWN) {
 			swordPositionsToErase.push_back(i);
 		}
 	}
@@ -136,7 +136,20 @@ bool cGame::Process()
 	}
 
 	//for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
-	//for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Move(Scene.GetMap());
+	int playerX, playerY;
+	Player.GetPosition(&playerX,&playerY);
+	for (int i = 0; i < allOctopus.size(); ++i) {
+		allOctopus[i].Move(Scene.GetMap(), playerX, playerY);
+		if (allOctopus[i].hasBall()) {
+			allOctopus[i].getBall()->Move(Scene.GetMap());
+			int state = allOctopus[i].getBall()->GetState();
+			if (state != STATE_WALKRIGHT && state != STATE_WALKLEFT && state != STATE_WALKUP && state != STATE_WALKDOWN) {
+				allOctopus[i].setHasBall(false);
+				allOctopus[i].getBall()->SetPosition(-1,-1);
+			}
+		}
+	}
+
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Move(Scene.GetMap());
 
 	if (!Player.isInvincible()) DetectCollisionsPlayer();
@@ -311,7 +324,10 @@ void cGame::Render()
 	Scene.Draw(Data.GetID(IMG_TILESET));
 
 	for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Draw(Data.GetID(IMG_DOG));
-	//for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
+	for (int i = 0; i < allOctopus.size(); ++i) {
+		allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
+		if (allOctopus[i].hasBall()) allOctopus[i].getBall()->Draw(Data.GetID(IMG_OCTOPUS));
+	}
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Draw(Data.GetID(IMG_WIZARD));
 
 	if (!Player.isDead()) Player.Draw(Data.GetID(IMG_PLAYER));
