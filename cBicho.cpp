@@ -351,7 +351,7 @@ void cBicho::takeDamage(float damage, char *pushSide)
 	this->delayInvincible = 0;
 	this->beingPushed = true;
 	this->pushOffset = 0;
-	//this->actualHealth -= damage;
+	this->actualHealth -= damage;
 	this->pushSide = *pushSide;
 }
 

@@ -70,6 +70,7 @@ bool cGame::Init()
 	Dog.SetState(STATE_LOOKRIGHT);
 	allDogs.push_back(Dog);
 
+	levelKind = LEVEL_OVERWORLD;
 	//Init music
 	if (!music.openFromFile("resources/music/overworld.ogg")) {
 		//error
@@ -140,6 +141,15 @@ bool cGame::Process()
 
 	if (!Player.isInvincible()) DetectCollisionsPlayer();
 
+	/*
+	if (Player.isDead()) {
+		music.stop();
+		if (!music.openFromFile("resources/music/gameover.ogg")) {
+		//error
+		}
+		music.play();
+	}*/
+	
 	ChangeLevel();
 
 	return res;
@@ -228,6 +238,7 @@ bool cGame::collisionBichoPlayer(cBicho *bicho, char * pushSide)
 
 void cGame::ChangeLevel()
 {
+	bool hasLevelKindChanged = false;
 	int tileX;
 	int tileY;
 	Player.GetTile(&tileX, &tileY);
@@ -238,28 +249,51 @@ void cGame::ChangeLevel()
 		} else if (tileY == 12 && state == 7) { // 2 -> 1
 			currentLevelY = 0;
 		} else if (tileY == 21 && state == 6) { // 2 -> 3
+			levelKind = LEVEL_DUNGEON;
 			currentLevelY = 2*LEVEL_HEIGHT;
-			// TODO update Link position
+			hasLevelKindChanged = true;
 		} else if (tileY == 23 && state == 7) { // 3 -> 2
+			levelKind = LEVEL_OVERWORLD;
 			currentLevelY = LEVEL_HEIGHT;
-			// TODO update Link position
+			hasLevelKindChanged = true;
 		}
-	} else if (tileY == 27 || tileY == 28) {
+	} else if (tileY == 26 || tileY == 27) {
 		if (tileX == 16 && state == 5) { // 3 -> 4
 			currentLevelX = LEVEL_WIDTH;
-			// TODO update Link position
 		} else if (tileX == 17 && state == 4) { // 4 -> 3
 			currentLevelX = 0;
-			// TODO update Link position
 		}
-	} else if (tileX == 24 || tileX == 25) { //
+	} else if (tileX == 23 || tileX == 24) { //
 		if (tileY == 22 && state == 6) { // 5 -> 4
+			levelKind = LEVEL_DUNGEON;
 			currentLevelY = 2*LEVEL_HEIGHT;
-			// TODO update Link position
+			hasLevelKindChanged = true;
 		} else if (tileY == 23 && state == 7) { // 4 -> 5
+			levelKind = LEVEL_BOSS;
 			currentLevelY = LEVEL_HEIGHT;
-			// TODO update Link position
+			hasLevelKindChanged = true;
 		}
+	}
+	if (hasLevelKindChanged) {
+		music.stop();
+		switch (levelKind) {
+			case LEVEL_OVERWORLD: 
+				if (!music.openFromFile("resources/music/overworld.ogg")) {
+					//error
+				}
+				break;
+			case LEVEL_DUNGEON:
+				if (!music.openFromFile("resources/music/dungeon.ogg")) {
+					//error
+				}
+				break;
+			case LEVEL_BOSS:
+				if (!music.openFromFile("resources/music/boss.ogg")) {
+					//error
+				}
+				break;
+		}
+		music.play();	
 	}
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -281,6 +315,7 @@ void cGame::Render()
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Draw(Data.GetID(IMG_WIZARD));
 
 	if (!Player.isDead()) Player.Draw(Data.GetID(IMG_PLAYER));
+
 	for (int i = 0; i < allSwords.size(); ++i) allSwords[i].Draw(Data.GetID(IMG_SWORD));
 
 	DrawMenu();
