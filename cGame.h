@@ -16,6 +16,10 @@
 #define LEVEL_WIDTH		256 //16*16
 #define MENU_MARGIN		30
 
+#define LEVEL_OVERWORLD	1
+#define LEVEL_DUNGEON	2
+#define LEVEL_BOSS		3	
+
 class cGame
 {
 public:
@@ -44,6 +48,7 @@ public:
 
 private:
 	unsigned char keys[256];
+	int levelKind;
 	cScene Scene;
 	cData Data;
 	cPlayer Player;

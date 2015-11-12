@@ -92,6 +92,7 @@ void cPlayer::Attack(std::vector<cSword> &allSwords, char * attackSide)
 	int stateSword = STATE_WALKRIGHT;
 	int offsetX = 0;
 	int offsetY = 0;
+	int attackKind = NORMAL_ATTACK;
 	if (state == STATE_LOOKLEFT || state == STATE_WALKLEFT) {
 		SetState(STATE_ATTACKLEFT);
 		stateSword = STATE_WALKLEFT;
@@ -107,18 +108,18 @@ void cPlayer::Attack(std::vector<cSword> &allSwords, char * attackSide)
 		SetState(STATE_ATTACKDOWN);
 		stateSword = STATE_WALKDOWN;
 		*attackSide = 'd';
-		offsetX = 3;
+		offsetX = 2;
 		offsetY = -10;
 	} else if (state == STATE_LOOKUP || state == STATE_WALKUP) {
 		SetState(STATE_ATTACKUP);
 		stateSword = STATE_WALKUP;
 		*attackSide = 'u';
-		offsetX = 1;
 		offsetY = 10;
 	}
 
 	//create the sword bullet if maxHealth
-	if (actualHealth == PLAYER_MAX_HEALTH) {
+	if (isFullHealth()) {
+		attackKind = SHOT_ATTACK;
 		int posX, posY;
 		this->GetPosition(&posX, &posY);
 
@@ -129,6 +130,19 @@ void cPlayer::Attack(std::vector<cSword> &allSwords, char * attackSide)
 		Sword.SetState(stateSword);
 		allSwords.push_back(Sword);
 	}
+
+	// Play the sound
+	if (attackKind == NORMAL_ATTACK) {
+		if (!buffer.loadFromFile("resources/music/sword.ogg")) {
+			//error
+		}
+	} else if (attackKind == SHOT_ATTACK) {
+		if (!buffer.loadFromFile("resources/music/swordShoot.ogg")) {
+			//error
+		}
+	}
+	sound.setBuffer(buffer);
+	sound.play();
 	seq = 0;
 	delay = 0;
 }
@@ -179,7 +193,7 @@ float cPlayer::getMaxHealth()
 
 bool cPlayer::isTileWall(int tileId) 
 {
-	if(tileId != 0 && tileId != 119 && tileId != 85 && tileId != 64 && tileId != 78 && tileId != 91 && tileId != 106 && tileId != 131 && tileId != 132 && tileId != 134 && tileId != 135)		{
+	if(tileId != 0 && tileId != 119 && tileId != 85 && tileId != 64 && tileId != 78 && tileId != 91 && tileId != 105 && tileId != 131 && tileId != 132 && tileId != 134 && tileId != 135)		{
 		return true; // overworld floor, dungeon floor and doors
 	}
 	return false;

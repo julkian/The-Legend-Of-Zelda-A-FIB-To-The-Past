@@ -8,6 +8,9 @@
 
 #define ATTACK_DELAY				20
 
+#define NORMAL_ATTACK				1
+#define SHOT_ATTACK					2
+
 #define STEP_LENGTH					2
 
 #define PLAYER_MAX_HEALTH			3.0
@@ -26,4 +29,8 @@ public:
 	bool	isFullHealth();
 	float	getMaxHealth();
 	bool	isTileWall(int tileId);
+
+private:
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
 };

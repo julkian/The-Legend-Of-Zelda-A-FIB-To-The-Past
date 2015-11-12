@@ -45,15 +45,8 @@ bool cGame::Init()
 	Player.SetState(STATE_LOOKRIGHT);
 
 	//Sword initialization
-	/*
 	res = Data.LoadImage(IMG_SWORD,"resources/charset/sword.png",GL_RGBA);
 	if(!res) return false;
-	cSword Sword;
-	Sword.SetWidthHeight(16,16);
-	Sword.SetTile(3,3);
-	Sword.SetWidthHeight(16,16);
-	Sword.SetState(STATE_WALKRIGHT);
-	allSwords.push_back(Sword); */
 
 	//Enemies initialization
 	
@@ -64,7 +57,7 @@ bool cGame::Init()
 	Octopus.SetWidthHeight(16,16);
 	Octopus.SetTile(5,5);
 	Octopus.SetWidthHeight(16,16);
-	//allOctopus.push_back(Octopus);
+	allOctopus.push_back(Octopus);
 
 	//Dog
 	cDog Dog;
@@ -76,11 +69,12 @@ bool cGame::Init()
 	Dog.SetState(STATE_LOOKRIGHT);
 	allDogs.push_back(Dog);
 
+	levelKind = LEVEL_OVERWORLD;
 	//Init music
-	if (!music.openFromFile("music/overworld.ogg")) {
+	if (!music.openFromFile("resources/music/overworld.ogg")) {
 		//error
 	}
-	//music.play();
+	music.play();
 
 	return res;
 }
@@ -132,17 +126,53 @@ bool cGame::Process()
 	
 	else Player.Stop();
 
-	for (int i = 0; i < allSwords.size(); ++i) allSwords[i].Move(Scene.GetMap());
+	std::vector<int> swordPositionsToErase;
+	for (int i = 0; i < allSwords.size(); ++i) {
+		allSwords[i].Move(Scene.GetMap());
+		int state = allSwords[i].GetState();
+		if (state != STATE_WALKRIGHT && state != STATE_WALKLEFT && state != STATE_WALKUP && state != STATE_WALKDOWN) {
+			swordPositionsToErase.push_back(i);
+		}
+	}
 
+	for (int j = 0; j < swordPositionsToErase.size(); ++j) {
+		allSwords.erase(allSwords.begin()+swordPositionsToErase[j]);
+	}
+
+	//dogs behaviour
 	for (int i = 0; i < allDogs.size(); ++i){
 		if (allDogs[i].isBeingPushed()) allDogs[i].pushMove(Scene.GetMap());
 		else allDogs[i].Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
 	}
-	//for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Move(Scene.GetMap());
+
+	//octopus behaviour
+	int playerX, playerY;
+	Player.GetPosition(&playerX,&playerY);
+	for (int i = 0; i < allOctopus.size(); ++i) {
+		allOctopus[i].Move(Scene.GetMap(), playerX, playerY);
+		if (allOctopus[i].hasBall()) {
+			allOctopus[i].getBall()->Move(Scene.GetMap());
+			int state = allOctopus[i].getBall()->GetState();
+			if (state != STATE_WALKRIGHT && state != STATE_WALKLEFT && state != STATE_WALKUP && state != STATE_WALKDOWN) {
+				allOctopus[i].setHasBall(false);
+				allOctopus[i].getBall()->SetPosition(-1,-1);
+			}
+		}
+	}
+
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Move(Scene.GetMap());
 
 	if (!Player.isInvincible()) DetectCollisionsPlayer();
 
+	/*
+	if (Player.isDead()) {
+		music.stop();
+		if (!music.openFromFile("resources/music/gameover.ogg")) {
+		//error
+		}
+		music.play();
+	}*/
+	
 	ChangeLevel();
 
 	return res;
@@ -234,6 +264,7 @@ bool cGame::collisionBetweenBichos(cBicho *bichoActive, cBicho *bichoPassive, ch
 
 void cGame::ChangeLevel()
 {
+	bool hasLevelKindChanged = false;
 	int tileX;
 	int tileY;
 	Player.GetTile(&tileX, &tileY);
@@ -244,28 +275,51 @@ void cGame::ChangeLevel()
 		} else if (tileY == 12 && state == 7) { // 2 -> 1
 			currentLevelY = 0;
 		} else if (tileY == 21 && state == 6) { // 2 -> 3
+			levelKind = LEVEL_DUNGEON;
 			currentLevelY = 2*LEVEL_HEIGHT;
-			// TODO update Link position
+			hasLevelKindChanged = true;
 		} else if (tileY == 23 && state == 7) { // 3 -> 2
+			levelKind = LEVEL_OVERWORLD;
 			currentLevelY = LEVEL_HEIGHT;
-			// TODO update Link position
+			hasLevelKindChanged = true;
 		}
-	} else if (tileY == 27 || tileY == 28) {
+	} else if (tileY == 26 || tileY == 27) {
 		if (tileX == 16 && state == 5) { // 3 -> 4
 			currentLevelX = LEVEL_WIDTH;
-			// TODO update Link position
 		} else if (tileX == 17 && state == 4) { // 4 -> 3
 			currentLevelX = 0;
-			// TODO update Link position
 		}
-	} else if (tileX == 24 || tileX == 25) { //
+	} else if (tileX == 23 || tileX == 24) { //
 		if (tileY == 22 && state == 6) { // 5 -> 4
+			levelKind = LEVEL_DUNGEON;
 			currentLevelY = 2*LEVEL_HEIGHT;
-			// TODO update Link position
+			hasLevelKindChanged = true;
 		} else if (tileY == 23 && state == 7) { // 4 -> 5
+			levelKind = LEVEL_BOSS;
 			currentLevelY = LEVEL_HEIGHT;
-			// TODO update Link position
+			hasLevelKindChanged = true;
 		}
+	}
+	if (hasLevelKindChanged) {
+		music.stop();
+		switch (levelKind) {
+			case LEVEL_OVERWORLD: 
+				if (!music.openFromFile("resources/music/overworld.ogg")) {
+					//error
+				}
+				break;
+			case LEVEL_DUNGEON:
+				if (!music.openFromFile("resources/music/dungeon.ogg")) {
+					//error
+				}
+				break;
+			case LEVEL_BOSS:
+				if (!music.openFromFile("resources/music/boss.ogg")) {
+					//error
+				}
+				break;
+		}
+		music.play();	
 	}
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -283,10 +337,14 @@ void cGame::Render()
 	Scene.Draw(Data.GetID(IMG_TILESET));
 
 	for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Draw(Data.GetID(IMG_DOG));
-	//for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
+	for (int i = 0; i < allOctopus.size(); ++i) {
+		allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
+		if (allOctopus[i].hasBall()) allOctopus[i].getBall()->Draw(Data.GetID(IMG_OCTOPUS));
+	}
 	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Draw(Data.GetID(IMG_WIZARD));
 
 	if (!Player.isDead()) Player.Draw(Data.GetID(IMG_PLAYER));
+
 	for (int i = 0; i < allSwords.size(); ++i) allSwords[i].Draw(Data.GetID(IMG_SWORD));
 
 	DrawMenu();
