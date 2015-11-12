@@ -33,7 +33,8 @@ public:
 	//Process
 	bool Process();
 	void ChangeLevel();
-	bool DetectCollisionsPlayer(); //collision
+	bool DetectCollisionsPlayer();		//collision bichos with player
+	void DetectCollisionPlayerAttack(char * attackSide); //collision player attacking against bichos
 
 	//Output
 	void Render();
@@ -54,5 +55,5 @@ private:
 	sf::Music music;
 
 	//methods
-	bool collisionBichoPlayer(cBicho *bicho, char * pushSide);
+	bool collisionBetweenBichos(cBicho *bichoActive, cBicho *bichoPassive, char * pushSide);
 };

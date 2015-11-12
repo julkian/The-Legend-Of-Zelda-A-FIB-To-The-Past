@@ -84,7 +84,9 @@ void cPlayer::Draw(int tex_id)
 	if (haveToBeDrawn) DrawRect(tex_id,xo,yo,xf,yf);
 }
 
-void cPlayer::Attack(std::vector<cSword> &allSwords)
+//(playerAttackXo,playerAttackYo) = (x abajo izquierda link + w, y abajo izquierda link)
+//(playerAttackXf,playerAttackYf) = (x abajo izquierda link, y abajo izquierda link + h)
+void cPlayer::Attack(std::vector<cSword> &allSwords, char * attackSide)
 {
 	int state = GetState();
 	int stateSword = STATE_WALKRIGHT;
@@ -93,20 +95,24 @@ void cPlayer::Attack(std::vector<cSword> &allSwords)
 	if (state == STATE_LOOKLEFT || state == STATE_WALKLEFT) {
 		SetState(STATE_ATTACKLEFT);
 		stateSword = STATE_WALKLEFT;
+		*attackSide = 'l';
 		offsetX = -10;
 	} else if (state == STATE_LOOKRIGHT || state == STATE_WALKRIGHT) {
 		SetState(STATE_ATTACKRIGHT);
 		stateSword = STATE_WALKRIGHT;
+		*attackSide = 'r';
 		offsetX = 10;
 		offsetY = -1;
 	} else if (state == STATE_LOOKDOWN || state == STATE_WALKDOWN) {
 		SetState(STATE_ATTACKDOWN);
 		stateSword = STATE_WALKDOWN;
+		*attackSide = 'd';
 		offsetX = 3;
 		offsetY = -10;
 	} else if (state == STATE_LOOKUP || state == STATE_WALKUP) {
 		SetState(STATE_ATTACKUP);
 		stateSword = STATE_WALKUP;
+		*attackSide = 'u';
 		offsetX = 1;
 		offsetY = 10;
 	}
@@ -177,62 +183,4 @@ bool cPlayer::isTileWall(int tileId)
 		return true; // overworld floor, dungeon floor and doors
 	}
 	return false;
-}
-
-void cPlayer::pushMove(int *map)
-{
-	int movement = BICHO_PUSH_DAMAGE_OFFSET / BICHO_PUSH_DAMAGE_DELAY;
-	switch (this->pushSide)
-	{
-		case 'u':
-				for (int i = movement; i > 0; i -= 2) 
-				{
-					this->y += i;
-					if (CollidesMapFloor(map, false))
-					{	
-						this->y -= i;
-						this->pushOffset = BICHO_PUSH_DAMAGE_OFFSET;
-					}  else i = -1;
-				}
-			break;
-		case 'd':
-				for (int i = movement; i > 0; i -= 2) 
-				{
-					this->y -= i;
-					if (CollidesMapFloor(map, true))
-					{	
-						this->y += i;
-						this->pushOffset = BICHO_PUSH_DAMAGE_OFFSET;
-					} else i = -1;
-				}
-			break;
-		case 'l':
-				for (int i = movement; i > 0; i -= 2) 
-				{
-					this->x -= i;
-					if (CollidesMapWall(map, false))
-					{
-						this->x += i;
-						this->pushOffset = BICHO_PUSH_DAMAGE_OFFSET;
-					} else i = -1;
-				}
-			break;
-		case 'r':
-				for (int i = movement; i > 0; i -= 2) 
-				{
-					this->x += i;
-					if (CollidesMapWall(map, true))
-					{
-						this->x -= i;
-						this->pushOffset = BICHO_PUSH_DAMAGE_OFFSET;
-					} else i = -1;
-				}
-			break;
-	}
-	this->pushOffset += movement;
-	if (this->pushOffset >= BICHO_PUSH_DAMAGE_OFFSET)
-	{
-		this->beingPushed = false;
-		this->pushOffset = 0;
-	}
 }

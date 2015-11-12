@@ -21,10 +21,9 @@ public:
 
 	void	Draw(int tex_id);
 	void	DrawRect(int tex_id,float xo,float yo,float xf,float yf);
-	void	Attack(std::vector<cSword> &allSwords);
+	void	Attack(std::vector<cSword> &allSwords, char * attackSide);
 	void	setInvincibility(bool invincible);
 	bool	isFullHealth();
 	float	getMaxHealth();
 	bool	isTileWall(int tileId);
-	void	pushMove(int *map);
 };

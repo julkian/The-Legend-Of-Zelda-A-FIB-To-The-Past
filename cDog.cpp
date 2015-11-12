@@ -5,6 +5,7 @@ cDog::cDog() {
 	setStepLength(STEP_LENGTH);
 	this->damage = DOG_DAMAGE;
 	this->actualHealth = DOG_MAX_HEALTH;
+	this->invincible = false;
 }
 cDog::~cDog(){}
 

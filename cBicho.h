@@ -67,6 +67,7 @@ public:
 	void MoveLeft(int *map);
 	void MoveUp(int *map);
 	void MoveDown(int *map);
+	void pushMove(int *map);
 	void Attack();
 	void Stop();
 	void Logic(int *map);
