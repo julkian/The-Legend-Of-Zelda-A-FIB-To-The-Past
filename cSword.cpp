@@ -60,7 +60,7 @@ void cSword::Move(int *map)
 {
 	int state = GetState();
 
-	if (state == STATE_WALKLEFT)			MoveLeft(map);
+	if (state == STATE_WALKLEFT)		MoveLeft(map);
 	else if (state == STATE_WALKRIGHT)	MoveRight(map);
 	else if (state == STATE_WALKDOWN)	MoveDown(map);
 	else if (state == STATE_WALKUP)		MoveUp(map);

@@ -102,12 +102,11 @@ void cPlayer::Attack(std::vector<cSword> &allSwords)
 	} else if (state == STATE_LOOKDOWN || state == STATE_WALKDOWN) {
 		SetState(STATE_ATTACKDOWN);
 		stateSword = STATE_WALKDOWN;
-		offsetX = 3;
+		offsetX = 2;
 		offsetY = -10;
 	} else if (state == STATE_LOOKUP || state == STATE_WALKUP) {
 		SetState(STATE_ATTACKUP);
 		stateSword = STATE_WALKUP;
-		offsetX = 1;
 		offsetY = 10;
 	}
 

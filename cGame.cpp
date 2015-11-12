@@ -48,13 +48,6 @@ bool cGame::Init()
 
 	res = Data.LoadImage(IMG_SWORD,"resources/charset/sword.png",GL_RGBA);
 	if(!res) return false;
-	/*
-	cSword Sword;
-	Sword.SetWidthHeight(16,16);
-	Sword.SetTile(3,3);
-	Sword.SetWidthHeight(16,16);
-	Sword.SetState(STATE_WALKRIGHT);
-	allSwords.push_back(Sword); */
 
 	//Enemies initialization
 	
@@ -78,10 +71,10 @@ bool cGame::Init()
 	allDogs.push_back(Dog);
 
 	//Init music
-	if (!music.openFromFile("music/overworld.ogg")) {
+	if (!music.openFromFile("resources/music/overworld.ogg")) {
 		//error
 	}
-	//music.play();
+	music.play();
 
 	return res;
 }
@@ -127,7 +120,18 @@ bool cGame::Process()
 	
 	else Player.Stop();
 
-	for (int i = 0; i < allSwords.size(); ++i) allSwords[i].Move(Scene.GetMap());
+	std::vector<int> swordPositionsToErase;
+	for (int i = 0; i < allSwords.size(); ++i) {
+		allSwords[i].Move(Scene.GetMap());
+		int state = allSwords[i].GetState();
+		if (allSwords[i].GetState() != STATE_WALKRIGHT && allSwords[i].GetState() != STATE_WALKLEFT && allSwords[i].GetState() != STATE_WALKUP && allSwords[i].GetState() != STATE_WALKDOWN) {
+			swordPositionsToErase.push_back(i);
+		}
+	}
+
+	for (int j = 0; j < swordPositionsToErase.size(); ++j) {
+		allSwords.erase(allSwords.begin()+swordPositionsToErase[j]);
+	}
 
 	//for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Move(Scene.GetMap(), Player.GetPositionX(), Player.GetPositionY());
 	//for (int i = 0; i < allOctopus.size(); ++i) allOctopus[i].Move(Scene.GetMap());
