@@ -6,6 +6,7 @@ cDog::cDog() {
 	this->damage = DOG_DAMAGE;
 	this->actualHealth = DOG_MAX_HEALTH;
 	this->invincible = false;
+	this->beingPushed = false;
 }
 cDog::~cDog(){}
 

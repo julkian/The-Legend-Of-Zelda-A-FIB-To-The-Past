@@ -149,7 +149,8 @@ bool cGame::Process()
 	int playerX, playerY;
 	Player.GetPosition(&playerX,&playerY);
 	for (int i = 0; i < allOctopus.size(); ++i) {
-		allOctopus[i].Move(Scene.GetMap(), playerX, playerY);
+		if (allOctopus[i].isBeingPushed()) allOctopus[i].pushMove(Scene.GetMap());
+		else allOctopus[i].Move(Scene.GetMap(), playerX, playerY);
 		if (allOctopus[i].hasBall()) {
 			allOctopus[i].getBall()->Move(Scene.GetMap());
 			int state = allOctopus[i].getBall()->GetState();
@@ -425,20 +426,49 @@ void cGame::DetectCollisionPlayerAttack(char * attackSide)
 			break;
 	}
 
+	//Dogs
+	std::vector<int> bichosPositionsToErase;
+
 	for (int i = 0; i < allDogs.size(); ++i)
 	{
 		if (!allDogs[i].isInvincible())
 		{
 			allDogs[i].GetPosition(&bichoX, &bichoY);
 			allDogs[i].GetWidthHeight(&bichoW, &bichoH);
-
+			
 			if (((attackXo >= bichoX && attackXo <= bichoX+bichoW) || (attackXo+playerW >= bichoX && attackXo+playerW <= bichoX+bichoW)) 
 				&& 
 				((attackYo >= bichoY && attackYo <= bichoY+bichoH) || (attackYo+playerH >= bichoY && attackYo+playerH <= bichoY+bichoH)))
 			{
 				allDogs[i].takeDamage(Player.getDamage(), attackSide);
+				if (allDogs[i].isDead()) bichosPositionsToErase.push_back(i);
 			}
 		}
-		
+	}
+
+	for (int j = 0; j < bichosPositionsToErase.size(); ++j) {
+		allDogs.erase(allDogs.begin()+bichosPositionsToErase[j]);
+	}
+	bichosPositionsToErase.clear();
+
+	for (int i = 0; i < allOctopus.size(); ++i)
+	{
+		if (!allOctopus[i].isInvincible())
+		{
+			allOctopus[i].GetPosition(&bichoX, &bichoY);
+			allOctopus[i].GetWidthHeight(&bichoW, &bichoH);
+
+			if (((attackXo >= bichoX && attackXo <= bichoX+bichoW) || (attackXo+playerW >= bichoX && attackXo+playerW <= bichoX+bichoW)) 
+				&& 
+				((attackYo >= bichoY && attackYo <= bichoY+bichoH) || (attackYo+playerH >= bichoY && attackYo+playerH <= bichoY+bichoH)))
+			{
+				allOctopus[i].takeDamage(Player.getDamage(), attackSide);
+				if (allOctopus[i].isDead()) bichosPositionsToErase.push_back(i);
+			}
+		}
+	}
+
+	for (int j = 0; j < bichosPositionsToErase.size(); ++j) {
+		allOctopus.erase(allOctopus.begin()+bichosPositionsToErase[j]);
 	}
 }
