@@ -25,8 +25,8 @@
 
 #define BICHO_HEALTH				2.0
 #define BICHO_DAMAGE				0.5
-#define BICHO_PUSH_DAMAGE_DELAY		20		//frames delay when is taking damage
-#define BICHO_PUSH_DAMAGE_OFFSET	24
+#define BICHO_PUSH_DAMAGE_DELAY		5		//frames delay when is taking damage
+#define BICHO_PUSH_DAMAGE_OFFSET	20
 
 #define PUSH_LEFT					'l'
 #define PUSH_UP						'u'
@@ -96,6 +96,8 @@ public:
 	bool manageInvincibility();
 
 	virtual bool isTileWall(int tileId);
+
+	bool isBeingPushed();
 	
 protected:
 	int x,y;
@@ -112,7 +114,7 @@ protected:
 	bool	invincible;
 	int		delayInvincible;
 
-	bool	isBeingPushed;
+	bool	beingPushed;
 	int		pushOffset;
 	char	pushSide;
 };

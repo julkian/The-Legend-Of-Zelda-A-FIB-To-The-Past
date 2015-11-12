@@ -349,9 +349,10 @@ void cBicho::takeDamage(float damage, char *pushSide)
 {
 	this->invincible = true;
 	this->delayInvincible = 0;
-	this->isBeingPushed = true;
+	this->beingPushed = true;
 	this->pushOffset = 0;
-	this->actualHealth -= damage;
+	//this->actualHealth -= damage;
+	this->pushSide = *pushSide;
 }
 
 bool cBicho::isDead()
@@ -427,4 +428,9 @@ bool cBicho::isTileWall(int tileId)
 		return true; // overworld floor, dungeon floor
 	}
 	return false;
+}
+
+bool cBicho::isBeingPushed() 
+{
+	return this->beingPushed;
 }

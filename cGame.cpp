@@ -65,7 +65,7 @@ bool cGame::Init()
 	res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
 	if(!res) return false;
 	Dog.SetWidthHeight(16,16);
-	Dog.SetTile(5,5);
+	Dog.SetTile(4,4);
 	Dog.SetWidthHeight(16,16);
 	Dog.SetState(STATE_LOOKRIGHT);
 	allDogs.push_back(Dog);
@@ -112,11 +112,12 @@ bool cGame::Process()
 	if(keys[27])	res=false;	
 	
 	//Game Logic
-	if(keys['z'] && !Player.isAttacking())	Player.Attack(allSwords);
-	else if(keys[GLUT_KEY_UP])				Player.MoveUp(Scene.GetMap());
-	else if(keys[GLUT_KEY_DOWN])			Player.MoveDown(Scene.GetMap());
-	else if(keys[GLUT_KEY_LEFT])			Player.MoveLeft(Scene.GetMap());
-	else if(keys[GLUT_KEY_RIGHT])			Player.MoveRight(Scene.GetMap());
+	if (Player.isBeingPushed())					Player.pushMove(Scene.GetMap());
+	else if(keys['z'] && !Player.isAttacking())	Player.Attack(allSwords);
+	else if(keys[GLUT_KEY_UP])					Player.MoveUp(Scene.GetMap());
+	else if(keys[GLUT_KEY_DOWN])				Player.MoveDown(Scene.GetMap());
+	else if(keys[GLUT_KEY_LEFT])				Player.MoveLeft(Scene.GetMap());
+	else if(keys[GLUT_KEY_RIGHT])				Player.MoveRight(Scene.GetMap());
 	
 	else Player.Stop();
 
