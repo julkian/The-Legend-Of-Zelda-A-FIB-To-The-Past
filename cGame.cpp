@@ -87,7 +87,7 @@ bool cGame::Init()
 bool cGame::Loop()
 {
 	bool res=true;
-	//Sleep(30);
+	Sleep(30);
 	res = Process();
 	if(res) Render();
 
@@ -128,10 +128,9 @@ bool cGame::Process()
 	else if(keys[GLUT_KEY_DOWN])				Player.MoveDown(Scene.GetMap());
 	else if(keys[GLUT_KEY_LEFT])				Player.MoveLeft(Scene.GetMap());
 	else if(keys[GLUT_KEY_RIGHT])				Player.MoveRight(Scene.GetMap());
-	
-	if (allSwords.size() > 0) DetectCollisionPlayerAttack(&attackSide, true);
-
 	else Player.Stop();
+
+	if (allSwords.size() > 0) DetectCollisionPlayerAttack(&attackSide, true);
 
 	std::vector<int> swordPositionsToErase;
 	for (int i = 0; i < allSwords.size(); ++i) {
