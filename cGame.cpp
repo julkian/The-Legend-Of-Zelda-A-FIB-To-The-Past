@@ -619,13 +619,13 @@ bool cGame::ProcessMenu()
 void cGame::RenderMenu(int imgId)
 {
 	glEnable(GL_TEXTURE_2D);
-	
+
 	glBindTexture(GL_TEXTURE_2D, Data.GetID(imgId));
 	glBegin(GL_QUADS);	
 		glTexCoord2f(0,1);		glVertex2i(0  ,0);
 		glTexCoord2f(1,1);		glVertex2i(LEVEL_WIDTH,0);
 		glTexCoord2f(1,0);		glVertex2i(LEVEL_WIDTH,LEVEL_HEIGHT+MENU_MARGIN);
-		glTexCoord2f(1,0);		glVertex2i(0  ,LEVEL_HEIGHT+MENU_MARGIN);
+		glTexCoord2f(0,0);		glVertex2i(0  ,LEVEL_HEIGHT+MENU_MARGIN);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
