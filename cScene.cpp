@@ -37,8 +37,15 @@ bool cScene::LoadLevel(int level)
 					std::getline(fd, str, ',');
 					map[(j*SCENE_WIDTH)+i] = std::stoi(str);
 
-					coordx_tile = (map[(j*SCENE_WIDTH)+i] % TILE_COLUMN) * (1/TILE_COLUMN_F);
-					coordy_tile = (map[(j*SCENE_WIDTH)+i] / TILE_COLUMN) * (1/TILE_ROWS_F);
+					int mapContent = map[(j*SCENE_WIDTH)+i];
+					if (isBossRoomBlocked) {
+						if (j == 21 && (i == 23 || i == 24)) {
+							map[(j*SCENE_WIDTH)+i] = 146;
+							mapContent = 146;
+						}
+					}
+					coordx_tile = (mapContent % TILE_COLUMN) * (1/TILE_COLUMN_F);
+					coordy_tile = (mapContent / TILE_COLUMN) * (1/TILE_ROWS_F);
 
 					glTexCoord2f(coordx_tile					,coordy_tile+(1/TILE_ROWS_F));	glVertex2i(px           ,py           );
 					glTexCoord2f(coordx_tile+(1/TILE_COLUMN_F)	,coordy_tile+(1/TILE_ROWS_F));	glVertex2i(px+BLOCK_SIZE,py           );
@@ -65,4 +72,10 @@ void cScene::Draw(int tex_id)
 int* cScene::GetMap()
 {
 	return map;
+}
+
+void cScene::blockBossRoom()
+{
+	isBossRoomBlocked = true;
+	this->LoadLevel(1);
 }

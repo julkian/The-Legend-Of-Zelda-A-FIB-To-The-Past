@@ -30,8 +30,10 @@ public:
 	bool LoadLevel(int level);
 	void Draw(int tex_id);
 	int *GetMap();
+	void blockBossRoom();
 
 private:
 	int map[SCENE_WIDTH * SCENE_HEIGHT];	//scene
 	int id_DL;								//actual level display list
+	bool isBossRoomBlocked;
 };

@@ -63,5 +63,6 @@ private:
 	sf::Music music;
 
 	//methods
+	void closeBossRoom();
 	bool collisionBetweenBichos(cBicho *bichoActive, cBicho *bichoPassive, char * pushSide);
 };
