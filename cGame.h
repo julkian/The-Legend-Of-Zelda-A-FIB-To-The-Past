@@ -76,6 +76,7 @@ private:
 	void RenderMenu(int imgId);
 
 	//methods
+	void closeBossRoom();
 	bool collisionBetweenBichos(cBicho *bichoActive, cBicho *bichoPassive, char * pushSide);
 
 

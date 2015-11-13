@@ -102,8 +102,9 @@ bool cGame::Init()
 bool cGame::Loop()
 {
 	bool res=true;
-
-	//Sleep(30);
+	//Sleep(24);
+	res = Process();
+	if(res) Render();
 
 	switch(level) 
 	{
@@ -227,6 +228,7 @@ bool cGame::Process()
 	}*/
 	
 	ChangeLevel();
+	closeBossRoom();
 
 	return res;
 }
@@ -310,6 +312,15 @@ bool cGame::collisionBetweenBichos(cBicho *bichoActive, cBicho *bichoPassive, ch
 	}
 
 	return false;
+}
+
+void cGame::closeBossRoom()
+{
+	if (levelKind == LEVEL_BOSS) {
+		if (Player.GetPositionY() + 16 < 2*LEVEL_HEIGHT - 16) {
+			Scene.blockBossRoom();
+		}
+	}
 }
 
 void cGame::ChangeLevel()
