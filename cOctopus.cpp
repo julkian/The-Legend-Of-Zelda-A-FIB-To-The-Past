@@ -10,6 +10,8 @@ cOctopus::cOctopus() {
 	this->damage = OCTOPUS_DAMAGE;
 	this->actualHealth = OCTOPUS_MAX_HEALTH;
 	isBall = false;
+	this->invincible = false;
+	this->beingPushed = false;
 }
 cOctopus::~cOctopus(){}
 
