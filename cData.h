@@ -19,12 +19,6 @@
 #define IMG_ABOUT		8
 #define IMG_CONTROLS	9
 
-/*
-#define IMG_SHOOT	4
-...
-*/
->>>>>>> 0f49c58e82edc6ed6fb66061005964e3b7734674
-
 class cData
 {
 public:

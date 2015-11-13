@@ -52,6 +52,8 @@ public:
 
 	void drawBichos();
 
+	int getLevel();
+
 private:
 	unsigned char keys[256];
 	int level;
@@ -69,14 +71,12 @@ private:
 
 	//menu
 	bool ProcessMenu();
-	void RenderMenu();
+	bool ProcessBack();
 	
-	bool ProcessControls();
-	void RenderControls();
-
-	bool ProcessAbout();
-	void RenderAbout();
+	void RenderMenu(int imgId);
 
 	//methods
 	bool collisionBetweenBichos(cBicho *bichoActive, cBicho *bichoPassive, char * pushSide);
+
+
 };
