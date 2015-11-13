@@ -13,10 +13,10 @@
 #define IMG_OCTOPUS		3
 #define IMG_HEART		4
 #define IMG_SWORD		5
-/*
-#define IMG_SHOOT	4
-...
-*/
+
+#define IMG_MENU		6
+#define IMG_ABOUT		7
+#define IMG_CONTROLS	8
 
 class cData
 {
