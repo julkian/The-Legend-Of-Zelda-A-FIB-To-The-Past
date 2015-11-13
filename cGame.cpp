@@ -255,6 +255,18 @@ bool cGame::DetectCollisionsPlayer()
 		}
 	}
 
+	if (!playerDamaged)
+	{
+		playerDamaged = collisionBetweenBichos(&Isaac, &Player, &pushSide);
+		if (playerDamaged) Player.takeDamage(Isaac.getDamage(), &pushSide);
+		std::vector<cTear> allTears = *Isaac.getAllTears();
+		for (int i = 0; i < allTears.size(); ++i)
+		{
+			playerDamaged = collisionBetweenBichos(&allTears[i], &Player, &pushSide);
+			if (playerDamaged) Player.takeDamage(allTears[i].getDamage(), &pushSide);
+		}
+	}
+
 	return playerDamaged;
 }
 /*
@@ -364,11 +376,13 @@ void cGame::ChangeLevel()
 	{
 		levelKind = LEVEL_DUNGEON;
 		hasLevelKindChanged = true;
+		Isaac.setCanAttack(false);
 	}
 	else if (level == 5 && levelKind != LEVEL_BOSS)
 	{
 		levelKind = LEVEL_BOSS;
 		hasLevelKindChanged = true;
+		Isaac.setCanAttack(true);
 	}
 
 	if (hasLevelKindChanged) {
@@ -602,6 +616,46 @@ void cGame::DetectCollisionPlayerAttack(char * attackSide, bool beam)
 	for (int l = 0; l < swordsPositionsToErase.size(); ++l) {
 		allSwords.erase(allSwords.begin()+swordsPositionsToErase[l]);
 	}
+	swordsPositionsToErase.clear();
+
+	Isaac.GetPosition(&bichoX, &bichoY);
+	Isaac.GetWidthHeight(&bichoW, &bichoH);
+			
+	//sword attack
+	if (!beam && ((attackXo >= bichoX && attackXo <= bichoX+bichoW) || (attackXo+playerW >= bichoX && attackXo+playerW <= bichoX+bichoW)) 
+		&& 
+		((attackYo >= bichoY && attackYo <= bichoY+bichoH) || (attackYo+playerH >= bichoY && attackYo+playerH <= bichoY+bichoH)))
+	{
+		Isaac.takeDamage(Player.getDamage(), attackSide);
+		if (Isaac.isDead()) 
+		{
+			Isaac.SetTile(-3,-3);
+			Isaac.setCanAttack(false);
+		}
+	} else //sword beam
+	{
+		for (int k = 0; k < allSwords.size(); ++k)
+		{
+			if (collisionBetweenBichos(&Isaac, &allSwords[k], attackSide))
+			{
+				if (*attackSide == 'r') *attackSide = 'l';
+				else if (*attackSide == 'l') *attackSide = 'r';
+				else if (*attackSide == 'u') *attackSide = 'd';
+				else *attackSide = 'u';
+				Isaac.takeDamage(Player.getDamage(), attackSide);
+				if (Isaac.isDead()) 
+				{
+					Isaac.SetTile(-3,-3);
+					Isaac.setCanAttack(false);
+				}
+				swordsPositionsToErase.push_back(k);
+			}
+		}
+	}
+	for (int l = 0; l < swordsPositionsToErase.size(); ++l) {
+		allSwords.erase(allSwords.begin()+swordsPositionsToErase[l]);
+	}
+	swordsPositionsToErase.clear();
 }
 
 bool cGame::ProcessMenu() 

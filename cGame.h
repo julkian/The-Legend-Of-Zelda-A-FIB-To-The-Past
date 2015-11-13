@@ -8,6 +8,7 @@
 #include "cOctopus.h"
 #include "cBicho.h"
 #include "cIsaac.h"
+#include "cTear.h"
 #include <vector>
 
 #define GAME_WIDTH		640

@@ -10,8 +10,8 @@
 
 #define ATTACK_DELAY	30
 
-#define ISAAC_MAX_HEALTH		10.0
-#define ISAAC_DAMAGE			1
+#define ISAAC_MAX_HEALTH		6.0
+#define ISAAC_DAMAGE			3
 
 //#define 
 
@@ -27,8 +27,10 @@ public:
 	void Attack(int playerX, int playerY);
 	cTear* getTear(int i);
 	void deleteTear(int i);
+	void setCanAttack(bool _canAttack);
 
 private:
 	std::vector<cTear> allTears;
 	int attackDelay;
+	bool canAttack;
 };

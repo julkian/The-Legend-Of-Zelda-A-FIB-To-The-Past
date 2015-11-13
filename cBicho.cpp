@@ -354,6 +354,11 @@ void cBicho::takeDamage(float damage, char *pushSide)
 	this->pushSide = *pushSide;
 }
 
+void cBicho::setActualHealth(float health)
+{
+	this->actualHealth = health;
+}
+
 bool cBicho::isDead()
 {
 	if (this->actualHealth <= 0) return true;

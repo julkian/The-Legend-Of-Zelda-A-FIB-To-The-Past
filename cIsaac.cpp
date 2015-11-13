@@ -6,6 +6,9 @@ cIsaac::cIsaac() {
 	this->w = 32;
 	this->h = 32;
 	this->attackDelay = 0;
+	this->invincible = false;
+	this->beingPushed = false;
+	this->canAttack = false;
 }
 cIsaac::~cIsaac(){}
 
@@ -35,7 +38,7 @@ void cIsaac::Draw(int tex_id)
 
 void cIsaac::Attack(int playerX, int playerY)
 {
-	if (attackDelay == ATTACK_DELAY) {
+	if (attackDelay == ATTACK_DELAY && this->canAttack) {
 		cTear Tear;
 		Tear.SetWidthHeight(16,16);
 		Tear.SetPosition(x,y);
@@ -60,4 +63,9 @@ cTear* cIsaac::getTear(int i)
 void cIsaac::deleteTear(int i) 
 {
 	allTears.erase(allTears.begin()+i);
+}
+
+void cIsaac::setCanAttack(bool _canAttack)
+{
+	this->canAttack = _canAttack;
 }

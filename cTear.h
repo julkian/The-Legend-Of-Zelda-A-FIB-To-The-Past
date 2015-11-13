@@ -6,7 +6,7 @@
 #define PLAYER_START_CY		2
 
 #define TEAR_DELAY			1
-#define TEAR_DAMAGE			3
+#define TEAR_DAMAGE			1
 
 #define STEP_LENGTH			2
 
