@@ -48,6 +48,7 @@ public:
 
 private:
 	unsigned char keys[256];
+	int level;
 	int levelKind;
 	cScene Scene;
 	cData Data;
@@ -55,7 +56,6 @@ private:
 	std::vector<cSword> allSwords;
 	std::vector<cOctopus> allOctopus;
 	std::vector<cDog> allDogs;
-	//std::vector<cWizard> allWizards;
 	int currentLevelX, currentLevelY;
 	sf::Music music;
 
