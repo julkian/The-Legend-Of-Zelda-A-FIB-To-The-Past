@@ -49,6 +49,7 @@ public:
 
 private:
 	unsigned char keys[256];
+	int level;
 	int levelKind;
 	cScene Scene;
 	cData Data;

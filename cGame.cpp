@@ -4,6 +4,8 @@
 
 cGame::cGame(void)
 {
+	level = 1;
+	levelKind = LEVEL_OVERWORLD;
 }
 
 cGame::~cGame(void)
@@ -284,38 +286,48 @@ void cGame::ChangeLevel()
 	int tileX;
 	int tileY;
 	Player.GetTile(&tileX, &tileY);
-	int state = Player.GetState();
-	if (tileX == 7 || tileX == 8) {
-		if (tileY == 11 && state == 6) { // 1 -> 2
-			currentLevelY = LEVEL_HEIGHT;
-		} else if (tileY == 12 && state == 7) { // 2 -> 1
-			currentLevelY = 0;
-		} else if (tileY == 21 && state == 6) { // 2 -> 3
-			levelKind = LEVEL_DUNGEON;
-			currentLevelY = 2*LEVEL_HEIGHT;
-			hasLevelKindChanged = true;
-		} else if (tileY == 23 && state == 7) { // 3 -> 2
-			levelKind = LEVEL_OVERWORLD;
-			currentLevelY = LEVEL_HEIGHT;
-			hasLevelKindChanged = true;
-		}
-	} else if (tileY == 26 || tileY == 27) {
-		if (tileX == 16 && state == 5) { // 3 -> 4
-			currentLevelX = LEVEL_WIDTH;
-		} else if (tileX == 17 && state == 4) { // 4 -> 3
-			currentLevelX = 0;
-		}
-	} else if (tileX == 23 || tileX == 24) { //
-		if (tileY == 22 && state == 6) { // 5 -> 4
-			levelKind = LEVEL_DUNGEON;
-			currentLevelY = 2*LEVEL_HEIGHT;
-			hasLevelKindChanged = true;
-		} else if (tileY == 23 && state == 7) { // 4 -> 5
-			levelKind = LEVEL_BOSS;
-			currentLevelY = LEVEL_HEIGHT;
-			hasLevelKindChanged = true;
-		}
+	int playerX, playerY, playerW, playerH;
+	Player.GetPosition(&playerX,&playerY);
+	Player.GetWidthHeight(&playerW, &playerH);
+
+	playerX = (playerX + playerW / 2) ;
+	playerY = (playerY + playerH / 2) ;	//coord player center
+	
+	if (playerY > currentLevelY + LEVEL_HEIGHT) //going up
+	{
+		++level;
+		currentLevelY += LEVEL_HEIGHT;
+	} else if (playerY < currentLevelY)	//going down
+	{
+		if (level == 4) ++level;
+		else --level;
+		currentLevelY -= LEVEL_HEIGHT;
+	} else if (playerX > currentLevelX + LEVEL_WIDTH) //going right
+	{
+		++level;
+		currentLevelX += LEVEL_WIDTH;
+	} else if (playerX < currentLevelX) //going left
+	{
+		--level;
+		currentLevelX -= LEVEL_WIDTH;
 	}
+
+	if (level < 3 && levelKind != LEVEL_OVERWORLD)
+	{
+			levelKind = LEVEL_OVERWORLD;
+			hasLevelKindChanged = true;
+	}
+	else if (level > 2 && level < 5 && levelKind != LEVEL_DUNGEON)
+	{
+		levelKind = LEVEL_DUNGEON;
+		hasLevelKindChanged = true;
+	}
+	else if (level == 5 && levelKind != LEVEL_BOSS)
+	{
+		levelKind = LEVEL_BOSS;
+		hasLevelKindChanged = true;
+	}
+
 	if (hasLevelKindChanged) {
 		music.stop();
 		switch (levelKind) {
@@ -341,6 +353,7 @@ void cGame::ChangeLevel()
 		}
 		music.play();	
 	}
+	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(currentLevelX,currentLevelX+LEVEL_WIDTH,currentLevelY,currentLevelY + LEVEL_HEIGHT + MENU_MARGIN,0,1);
