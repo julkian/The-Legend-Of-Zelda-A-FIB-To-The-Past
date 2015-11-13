@@ -88,6 +88,11 @@ bool cGame::Init()
 		Dog.SetState(STATE_LOOKRIGHT);
 		allDogs.push_back(Dog);
 
+		//Isaac
+		res = Data.LoadImage(IMG_ISAAC,"resources/charset/isaac.png",GL_RGBA);
+		if(!res) return false;
+		Isaac.SetTile(-3,-3);
+
 		levelKind = LEVEL_OVERWORLD;
 		//Init music
 		if (!music.openFromFile("resources/music/overworld.ogg")) {
@@ -101,6 +106,7 @@ bool cGame::Init()
 bool cGame::Loop()
 {
 	bool res=true;
+
 	//Sleep(30);
 
 	switch(level) 
@@ -164,8 +170,6 @@ bool cGame::Process()
 
 	if (allSwords.size() > 0) DetectCollisionPlayerAttack(&attackSide, true);
 
-	
-
 	std::vector<int> swordPositionsToErase;
 	for (int i = 0; i < allSwords.size(); ++i) {
 		allSwords[i].Move(Scene.GetMap());
@@ -201,7 +205,19 @@ bool cGame::Process()
 		}
 	}
 
-	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Move(Scene.GetMap());
+	if (levelKind == LEVEL_BOSS) Isaac.Attack(playerX, playerY);
+
+	std::vector<int> tearPositionsToErase;
+	for (int i=0; i < Isaac.getAllTears()->size(); ++i) {
+		Isaac.getTear(i)->Move(Scene.GetMap());
+		int state = Isaac.getTear(i)->GetState();
+		if (state == STATE_LOOKLEFT) {
+			tearPositionsToErase.push_back(i);
+		}
+	}
+	for (int j=0; j < tearPositionsToErase.size(); ++j) {
+		Isaac.deleteTear(tearPositionsToErase[j]);
+	}
 
 	if (!Player.isInvincible()) DetectCollisionsPlayer();
 
@@ -362,6 +378,10 @@ void cGame::ChangeLevel()
 				}
 				break;
 			case LEVEL_BOSS:
+				Isaac.SetWidthHeight(32,32);
+				Isaac.SetTile(23,12);
+				Isaac.SetWidthHeight(32,32);
+				Isaac.SetState(STATE_LOOKRIGHT);
 				if (!music.openFromFile("resources/music/boss.ogg")) {
 					//error
 				}
@@ -390,11 +410,16 @@ void cGame::Render()
 		allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
 		if (allOctopus[i].hasBall()) allOctopus[i].getBall()->Draw(Data.GetID(IMG_OCTOPUS));
 	}
-	//for (int i = 0; i < allWizards.size(); ++i) allWizards[i].Draw(Data.GetID(IMG_WIZARD));
+
+	for (int i=0; i < Isaac.getAllTears()->size(); ++i) {
+		Isaac.getTear(i)->Draw(Data.GetID(IMG_OCTOPUS));
+	}
 
 	if (!Player.isDead()) Player.Draw(Data.GetID(IMG_PLAYER));
 
 	for (int i = 0; i < allSwords.size(); ++i) allSwords[i].Draw(Data.GetID(IMG_SWORD));
+
+	Isaac.Draw(Data.GetID(IMG_ISAAC));
 
 	DrawMenu();
 
@@ -570,10 +595,10 @@ void cGame::RenderMenu()
 	bool res=true;
 	
 	//Game Logic
-	if(keys[GLUT_KEY_UP])			Player.MoveUp(Scene.GetMap());
-	else if(keys[GLUT_KEY_DOWN])	Player.MoveDown(Scene.GetMap());
-	else if(keys[GLUT_KEY_LEFT])	Player.MoveLeft(Scene.GetMap());
-	else if(keys[GLUT_KEY_RIGHT])	Player.MoveRight(Scene.GetMap());
+	if(keys['p'])		Player.MoveUp(Scene.GetMap());
+	else if(keys[''])	Player.MoveDown(Scene.GetMap());
+	else if(keys[''])	Player.MoveLeft(Scene.GetMap());
+	else if(keys[''])	Player.MoveRight(Scene.GetMap());
 }
 
 bool cGame::ProcessAbout()
