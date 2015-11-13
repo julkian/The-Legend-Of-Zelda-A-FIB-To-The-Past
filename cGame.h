@@ -19,7 +19,12 @@
 
 #define LEVEL_OVERWORLD	1
 #define LEVEL_DUNGEON	2
-#define LEVEL_BOSS		3	
+#define LEVEL_BOSS		3
+
+#define MENU			60
+#define CONTROLS		70
+#define ABOUT			50
+
 
 class cGame
 {
@@ -61,6 +66,16 @@ private:
 	//std::vector<cWizard> allWizards;
 	int currentLevelX, currentLevelY;
 	sf::Music music;
+
+	//menu
+	bool ProcessMenu();
+	void RenderMenu();
+	
+	bool ProcessControls();
+	void RenderControls();
+
+	bool ProcessAbout();
+	void RenderAbout();
 
 	//methods
 	void closeBossRoom();

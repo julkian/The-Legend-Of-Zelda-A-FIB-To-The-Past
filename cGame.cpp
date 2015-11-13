@@ -4,6 +4,7 @@
 
 cGame::cGame(void)
 {
+	//level = MENU;
 	level = 1;
 	levelKind = LEVEL_OVERWORLD;
 }
@@ -16,82 +17,119 @@ bool cGame::Init()
 {
 	bool res=true;
 
-	//Graphics initialization
-	glClearColor(0.0f,0.0f,0.0f,0.0f);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	currentLevelX = 0;
-	currentLevelY = 0;
-	glOrtho(currentLevelX,currentLevelX+LEVEL_WIDTH,currentLevelY,currentLevelY + LEVEL_HEIGHT + MENU_MARGIN,0,1);
-	glMatrixMode(GL_MODELVIEW);
-	glAlphaFunc(GL_GREATER, 0.05f);
-	glEnable(GL_ALPHA_TEST);
+	if (level == MENU) 
+	{
+		//Graphics initialization
+		glClearColor(0.0f,0.0f,0.0f,0.0f);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		currentLevelX = 0;
+		currentLevelY = 0;
+		glOrtho(currentLevelX,currentLevelX+LEVEL_WIDTH,currentLevelY,currentLevelY + LEVEL_HEIGHT + MENU_MARGIN,0,1);
+		glMatrixMode(GL_MODELVIEW);
+		glAlphaFunc(GL_GREATER, 0.05f);
+		glEnable(GL_ALPHA_TEST);
 
-	//Scene initialization
-	res = Data.LoadImage(IMG_TILESET,"resources/level/tileset.png",GL_RGB);
-	if(!res) return false;
-	res = Scene.LoadLevel(1);
-	if(!res) return false;
+		//Menu initialization
+		res = Data.LoadImage(IMG_MENU,"resources/menu/menu.png",GL_RGB);
+		if(!res) return false;
 
-	//Heart initialization
-	res = Data.LoadImage(IMG_HEART,"resources/charset/heart.png",GL_RGBA);
-	if(!res) return false;
+		//Control initialization
+		res = Data.LoadImage(IMG_CONTROLS,"resources/menu/controls.png",GL_RGB);
+		if(!res) return false;
 
-	//Player initialization
+		//About initialization
+		res = Data.LoadImage(IMG_ABOUT,"resources/menu/about.png",GL_RGB);
+		if(!res) return false;
 
-	res = Data.LoadImage(IMG_PLAYER,"resources/charset/link.png",GL_RGBA);
-	if(!res) return false;
-	Player.SetWidthHeight(16,16);
-	Player.SetTile(1,5);
-	Player.SetWidthHeight(16,16);
-	Player.SetState(STATE_LOOKRIGHT);
+	} else
+	{
+		//Scene initialization
+		res = Data.LoadImage(IMG_TILESET,"resources/level/tileset.png",GL_RGB);
+		if(!res) return false;
+		res = Scene.LoadLevel(1);
+		if(!res) return false;
 
-	//Sword initialization
-	res = Data.LoadImage(IMG_SWORD,"resources/charset/sword.png",GL_RGBA);
-	if(!res) return false;
+		//Heart initialization
+		res = Data.LoadImage(IMG_HEART,"resources/charset/heart.png",GL_RGBA);
+		if(!res) return false;
 
-	//Enemies initialization
+		//Player initialization
+
+		res = Data.LoadImage(IMG_PLAYER,"resources/charset/link.png",GL_RGBA);
+		if(!res) return false;
+		Player.SetWidthHeight(16,16);
+		Player.SetTile(10,5);
+		Player.SetWidthHeight(16,16);
+		Player.SetState(STATE_LOOKRIGHT);
+
+		//Sword initialization
+		res = Data.LoadImage(IMG_SWORD,"resources/charset/sword.png",GL_RGBA);
+		if(!res) return false;
+
+		//Enemies initialization
 	
-	//Octopus
-	cOctopus Octopus;
-	res = Data.LoadImage(IMG_OCTOPUS,"resources/charset/enemyOctopus.png",GL_RGBA);
-	if(!res) return false;
-	Octopus.SetWidthHeight(16,16);
-	Octopus.SetTile(5,5);
-	Octopus.SetWidthHeight(16,16);
-	allOctopus.push_back(Octopus);
+		//Octopus
+		cOctopus Octopus;
+		res = Data.LoadImage(IMG_OCTOPUS,"resources/charset/enemyOctopus.png",GL_RGBA);
+		if(!res) return false;
+		Octopus.SetWidthHeight(16,16);
+		Octopus.SetTile(5,5);
+		Octopus.SetWidthHeight(16,16);
+		allOctopus.push_back(Octopus);
 
-	//Dog
-	cDog Dog;
-	res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
-	if(!res) return false;
-	Dog.SetWidthHeight(16,16);
-	Dog.SetTile(4,4);
-	Dog.SetWidthHeight(16,16);
-	Dog.SetState(STATE_LOOKRIGHT);
-	allDogs.push_back(Dog);
+		//Dog
+		cDog Dog;
+		res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
+		if(!res) return false;
+		Dog.SetWidthHeight(16,16);
+		Dog.SetTile(4,4);
+		Dog.SetWidthHeight(16,16);
+		Dog.SetState(STATE_LOOKRIGHT);
+		allDogs.push_back(Dog);
 
-	//Isaac
-	res = Data.LoadImage(IMG_ISAAC,"resources/charset/isaac.png",GL_RGBA);
-	if(!res) return false;
-	Isaac.SetTile(-3,-3);
+		//Isaac
+		res = Data.LoadImage(IMG_ISAAC,"resources/charset/isaac.png",GL_RGBA);
+		if(!res) return false;
+		Isaac.SetTile(-3,-3);
 
-	levelKind = LEVEL_OVERWORLD;
-	//Init music
-	if (!music.openFromFile("resources/music/overworld.ogg")) {
-		//error
+		levelKind = LEVEL_OVERWORLD;
+		//Init music
+		if (!music.openFromFile("resources/music/overworld.ogg")) {
+			//error
+		}
+		music.play();
 	}
-	music.play();
-
 	return res;
 }
 
 bool cGame::Loop()
 {
 	bool res=true;
-	Sleep(24);
+	//Sleep(24);
 	res = Process();
 	if(res) Render();
+
+	switch(level) 
+	{
+		case MENU:
+			res = ProcessMenu();
+			if (res) RenderMenu();
+			break;
+		case CONTROLS:
+			res = ProcessControls();
+			if (res) RenderControls();
+			break;
+		case ABOUT:
+			res = ProcessAbout();
+			if (res) RenderAbout();
+			break;
+		default:
+			res = Process();
+			if(res) Render();
+			break;
+	}
+>>>>>>> ed42d7cd2de7af8f8bb7169c8b7b07d93670bc36
 
 	return res;
 }
@@ -557,4 +595,40 @@ void cGame::DetectCollisionPlayerAttack(char * attackSide, bool beam)
 	for (int l = 0; l < swordsPositionsToErase.size(); ++l) {
 		allSwords.erase(allSwords.begin()+swordsPositionsToErase[l]);
 	}
+}
+
+bool cGame::ProcessMenu() 
+{
+
+}
+
+void cGame::RenderMenu()
+{
+	bool res=true;
+	
+	//Game Logic
+	if(keys['p'])		Player.MoveUp(Scene.GetMap());
+	else if(keys[''])	Player.MoveDown(Scene.GetMap());
+	else if(keys[''])	Player.MoveLeft(Scene.GetMap());
+	else if(keys[''])	Player.MoveRight(Scene.GetMap());
+}
+
+bool cGame::ProcessAbout()
+{
+
+}
+
+void cGame::RenderAbout()
+{
+
+}
+
+bool cGame::ProcessControls()
+{
+
+}
+
+void cGame::RenderControls()
+{
+
 }
