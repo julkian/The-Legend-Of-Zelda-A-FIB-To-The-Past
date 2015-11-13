@@ -6,7 +6,7 @@
 #define PLAYER_START_CY		2
 
 #define DOG_DAMAGE			0.5
-#define DOG_MAX_HEALTH		3
+#define DOG_MAX_HEALTH		2
 
 #define STEP_LENGTH			1
 

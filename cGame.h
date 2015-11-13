@@ -53,6 +53,7 @@ public:
 	void drawBichos();
 
 	int getLevel();
+	void putEnemies();
 
 private:
 	unsigned char keys[256];

@@ -66,23 +66,12 @@ bool cGame::Init()
 	//Enemies initialization
 	
 	//Octopus
-	cOctopus Octopus;
 	res = Data.LoadImage(IMG_OCTOPUS,"resources/charset/enemyOctopus.png",GL_RGBA);
 	if(!res) return false;
-	Octopus.SetWidthHeight(16,16);
-	Octopus.SetTile(5,5);
-	Octopus.SetWidthHeight(16,16);
-	allOctopus.push_back(Octopus);
 
 	//Dog
-	cDog Dog;
 	res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
 	if(!res) return false;
-	Dog.SetWidthHeight(16,16);
-	Dog.SetTile(4,4);
-	Dog.SetWidthHeight(16,16);
-	Dog.SetState(STATE_LOOKRIGHT);
-	allDogs.push_back(Dog);
 
 	//Isaac
 	res = Data.LoadImage(IMG_ISAAC,"resources/charset/isaac.png",GL_RGBA);
@@ -102,7 +91,7 @@ bool cGame::Init()
 bool cGame::Loop()
 {
 	bool res=true;
-	//Sleep(24);
+	Sleep(24);
 	res = Process();
 	if(res) Render();
 
@@ -233,6 +222,71 @@ bool cGame::Process()
 	return res;
 }
 
+void cGame::putEnemies()
+{
+	allDogs.clear();
+	allOctopus.clear();
+
+	switch (level) {
+		case 1:	break;
+		case 2: 
+		{
+			cDog Dog;
+			Dog.SetWidthHeight(16,16);
+			Dog.SetTile(3,17);
+			Dog.SetWidthHeight(16,16);
+			Dog.SetState(STATE_LOOKRIGHT);
+			allDogs.push_back(Dog);
+
+			cOctopus Octopus;
+			Octopus.SetWidthHeight(16,16);
+			Octopus.SetTile(11,18);
+			Octopus.SetWidthHeight(16,16);
+			allOctopus.push_back(Octopus);
+			break;
+		}
+		case 3: 
+		{
+			cDog Dog;
+			Dog.SetWidthHeight(16,16);
+			Dog.SetTile(11,31);
+			Dog.SetWidthHeight(16,16);
+			Dog.SetState(STATE_LOOKDOWN);
+			allDogs.push_back(Dog);
+			break;
+		}
+		case 4: 
+		{
+			cOctopus Octopus1;
+			Octopus1.SetWidthHeight(16,16);
+			Octopus1.SetTile(21,24);
+			Octopus1.SetWidthHeight(16,16);
+			allOctopus.push_back(Octopus1);
+
+			cOctopus Octopus2;
+			Octopus2.SetWidthHeight(16,16);
+			Octopus2.SetTile(21,30);
+			Octopus2.SetWidthHeight(16,16);
+			allOctopus.push_back(Octopus2);
+
+			cOctopus Octopus3;
+			Octopus3.SetWidthHeight(16,16);
+			Octopus3.SetTile(26,24);
+			Octopus3.SetWidthHeight(16,16);
+			allOctopus.push_back(Octopus3);
+
+			cOctopus Octopus4;
+			Octopus4.SetWidthHeight(16,16);
+			Octopus4.SetTile(26,30);
+			Octopus4.SetWidthHeight(16,16);
+			allOctopus.push_back(Octopus4);
+
+			break;
+		}
+		case 5: break;
+	}
+}
+
 bool cGame::DetectCollisionsPlayer() 
 {
 	bool playerDamaged = false;
@@ -332,6 +386,7 @@ void cGame::ChangeLevel()
 	int playerX, playerY, playerW, playerH;
 	Player.GetPosition(&playerX,&playerY);
 	Player.GetWidthHeight(&playerW, &playerH);
+	int levelBefore = level;
 
 	playerX = (playerX + playerW / 2) ;
 	playerY = (playerY + playerH / 2) ;	//coord player center
@@ -395,6 +450,10 @@ void cGame::ChangeLevel()
 				break;
 		}
 		music.play();	
+	}
+
+	if (levelBefore != level) {
+		putEnemies();
 	}
 	
 	glMatrixMode(GL_PROJECTION);
