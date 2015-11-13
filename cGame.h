@@ -7,6 +7,7 @@
 #include "cDog.h"
 #include "cOctopus.h"
 #include "cBicho.h"
+#include "cIsaac.h"
 #include <vector>
 
 #define GAME_WIDTH		640
@@ -54,6 +55,7 @@ private:
 	std::vector<cSword> allSwords;
 	std::vector<cOctopus> allOctopus;
 	std::vector<cDog> allDogs;
+	cIsaac Isaac;
 	//std::vector<cWizard> allWizards;
 	int currentLevelX, currentLevelY;
 	sf::Music music;
