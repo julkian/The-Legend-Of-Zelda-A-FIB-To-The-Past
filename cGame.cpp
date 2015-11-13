@@ -4,8 +4,8 @@
 
 cGame::cGame(void)
 {
-	//level = MENU;
-	level = 1;
+	level = MENU;
+	//level = 1;
 	levelKind = LEVEL_OVERWORLD;
 }
 
@@ -17,89 +17,85 @@ bool cGame::Init()
 {
 	bool res=true;
 
-	if (level == MENU) 
-	{
-		//Graphics initialization
-		glClearColor(0.0f,0.0f,0.0f,0.0f);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		currentLevelX = 0;
-		currentLevelY = 0;
-		glOrtho(currentLevelX,currentLevelX+LEVEL_WIDTH,currentLevelY,currentLevelY + LEVEL_HEIGHT + MENU_MARGIN,0,1);
-		glMatrixMode(GL_MODELVIEW);
-		glAlphaFunc(GL_GREATER, 0.05f);
-		glEnable(GL_ALPHA_TEST);
+	//Graphics initialization
+	glClearColor(0.0f,0.0f,0.0f,0.0f);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	currentLevelX = 0;
+	currentLevelY = 0;
+	glOrtho(currentLevelX,currentLevelX+LEVEL_WIDTH,currentLevelY,currentLevelY + LEVEL_HEIGHT + MENU_MARGIN,0,1);
+	glMatrixMode(GL_MODELVIEW);
+	glAlphaFunc(GL_GREATER, 0.05f);
+	glEnable(GL_ALPHA_TEST);
 
-		//Menu initialization
-		res = Data.LoadImage(IMG_MENU,"resources/menu/menu.png",GL_RGB);
-		if(!res) return false;
+	//Menu initialization
+	res = Data.LoadImage(IMG_MENU,"resources/menu/menu.png",GL_RGBA);
+	if(!res) return false;
 
-		//Control initialization
-		res = Data.LoadImage(IMG_CONTROLS,"resources/menu/controls.png",GL_RGB);
-		if(!res) return false;
+	//Control initialization
+	res = Data.LoadImage(IMG_CONTROLS,"resources/menu/controls.png",GL_RGBA);
+	if(!res) return false;
 
-		//About initialization
-		res = Data.LoadImage(IMG_ABOUT,"resources/menu/about.png",GL_RGB);
-		if(!res) return false;
+	//About initialization
+	res = Data.LoadImage(IMG_ABOUT,"resources/menu/about.png",GL_RGBA);
+	if(!res) return false;
 
-	} else
-	{
-		//Scene initialization
-		res = Data.LoadImage(IMG_TILESET,"resources/level/tileset.png",GL_RGB);
-		if(!res) return false;
-		res = Scene.LoadLevel(1);
-		if(!res) return false;
+	//Scene initialization
+	res = Data.LoadImage(IMG_TILESET,"resources/level/tileset.png",GL_RGB);
+	if(!res) return false;
+	res = Scene.LoadLevel(1);
+	if(!res) return false;
 
-		//Heart initialization
-		res = Data.LoadImage(IMG_HEART,"resources/charset/heart.png",GL_RGBA);
-		if(!res) return false;
+	//Heart initialization
+	res = Data.LoadImage(IMG_HEART,"resources/charset/heart.png",GL_RGBA);
+	if(!res) return false;
 
-		//Player initialization
+	//Player initialization
 
-		res = Data.LoadImage(IMG_PLAYER,"resources/charset/link.png",GL_RGBA);
-		if(!res) return false;
-		Player.SetWidthHeight(16,16);
-		Player.SetTile(10,5);
-		Player.SetWidthHeight(16,16);
-		Player.SetState(STATE_LOOKRIGHT);
+	res = Data.LoadImage(IMG_PLAYER,"resources/charset/link.png",GL_RGBA);
+	if(!res) return false;
+	Player.SetWidthHeight(16,16);
+	Player.SetTile(10,5);
+	Player.SetWidthHeight(16,16);
+	Player.SetState(STATE_LOOKRIGHT);
 
-		//Sword initialization
-		res = Data.LoadImage(IMG_SWORD,"resources/charset/sword.png",GL_RGBA);
-		if(!res) return false;
+	//Sword initialization
+	res = Data.LoadImage(IMG_SWORD,"resources/charset/sword.png",GL_RGBA);
+	if(!res) return false;
 
-		//Enemies initialization
+	//Enemies initialization
 	
-		//Octopus
-		cOctopus Octopus;
-		res = Data.LoadImage(IMG_OCTOPUS,"resources/charset/enemyOctopus.png",GL_RGBA);
-		if(!res) return false;
-		Octopus.SetWidthHeight(16,16);
-		Octopus.SetTile(5,5);
-		Octopus.SetWidthHeight(16,16);
-		allOctopus.push_back(Octopus);
+	//Octopus
+	cOctopus Octopus;
+	res = Data.LoadImage(IMG_OCTOPUS,"resources/charset/enemyOctopus.png",GL_RGBA);
+	if(!res) return false;
+	Octopus.SetWidthHeight(16,16);
+	Octopus.SetTile(5,5);
+	Octopus.SetWidthHeight(16,16);
+	allOctopus.push_back(Octopus);
 
-		//Dog
-		cDog Dog;
-		res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
-		if(!res) return false;
-		Dog.SetWidthHeight(16,16);
-		Dog.SetTile(4,4);
-		Dog.SetWidthHeight(16,16);
-		Dog.SetState(STATE_LOOKRIGHT);
-		allDogs.push_back(Dog);
+	//Dog
+	cDog Dog;
+	res = Data.LoadImage(IMG_DOG,"resources/charset/enemyDog.png",GL_RGBA);
+	if(!res) return false;
+	Dog.SetWidthHeight(16,16);
+	Dog.SetTile(4,4);
+	Dog.SetWidthHeight(16,16);
+	Dog.SetState(STATE_LOOKRIGHT);
+	allDogs.push_back(Dog);
 
-		//Isaac
-		res = Data.LoadImage(IMG_ISAAC,"resources/charset/isaac.png",GL_RGBA);
-		if(!res) return false;
-		Isaac.SetTile(-3,-3);
+	//Isaac
+	res = Data.LoadImage(IMG_ISAAC,"resources/charset/isaac.png",GL_RGBA);
+	if(!res) return false;
+	Isaac.SetTile(-3,-3);
 
-		levelKind = LEVEL_OVERWORLD;
-		//Init music
-		if (!music.openFromFile("resources/music/overworld.ogg")) {
-			//error
-		}
-		music.play();
+	levelKind = LEVEL_OVERWORLD;
+	//Init music
+	if (!music.openFromFile("resources/music/overworld.ogg")) {
+		//error
 	}
+	music.play();
+
 	return res;
 }
 
@@ -114,22 +110,21 @@ bool cGame::Loop()
 	{
 		case MENU:
 			res = ProcessMenu();
-			if (res) RenderMenu();
+			if (res) Render();
 			break;
 		case CONTROLS:
-			res = ProcessControls();
-			if (res) RenderControls();
+			res = ProcessBack();
+			if (res) Render();
 			break;
 		case ABOUT:
-			res = ProcessAbout();
-			if (res) RenderAbout();
+			res = ProcessBack();
+			if (res) Render();
 			break;
 		default:
 			res = Process();
 			if(res) Render();
 			break;
 	}
->>>>>>> ed42d7cd2de7af8f8bb7169c8b7b07d93670bc36
 
 	return res;
 }
@@ -415,25 +410,37 @@ void cGame::Render()
 	
 	glLoadIdentity();
 
-	Scene.Draw(Data.GetID(IMG_TILESET));
+	if (level == MENU)
+	{
+		RenderMenu(IMG_MENU);
+	}else if (level == ABOUT)
+	{
+		RenderMenu(IMG_ABOUT);
+	}else if (level == CONTROLS)
+	{
+		RenderMenu(IMG_CONTROLS);
+	}else
+	{
+		Scene.Draw(Data.GetID(IMG_TILESET));
 
-	for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Draw(Data.GetID(IMG_DOG));
-	for (int i = 0; i < allOctopus.size(); ++i) {
-		allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
-		if (allOctopus[i].hasBall()) allOctopus[i].getBall()->Draw(Data.GetID(IMG_OCTOPUS));
+		for (int i = 0; i < allDogs.size(); ++i) allDogs[i].Draw(Data.GetID(IMG_DOG));
+		for (int i = 0; i < allOctopus.size(); ++i) {
+			allOctopus[i].Draw(Data.GetID(IMG_OCTOPUS));
+			if (allOctopus[i].hasBall()) allOctopus[i].getBall()->Draw(Data.GetID(IMG_OCTOPUS));
+		}
+
+		for (int i=0; i < Isaac.getAllTears()->size(); ++i) {
+			Isaac.getTear(i)->Draw(Data.GetID(IMG_OCTOPUS));
+		}
+
+		if (!Player.isDead()) Player.Draw(Data.GetID(IMG_PLAYER));
+
+		for (int i = 0; i < allSwords.size(); ++i) allSwords[i].Draw(Data.GetID(IMG_SWORD));
+
+		Isaac.Draw(Data.GetID(IMG_ISAAC));
+
+		DrawMenu();
 	}
-
-	for (int i=0; i < Isaac.getAllTears()->size(); ++i) {
-		Isaac.getTear(i)->Draw(Data.GetID(IMG_OCTOPUS));
-	}
-
-	if (!Player.isDead()) Player.Draw(Data.GetID(IMG_PLAYER));
-
-	for (int i = 0; i < allSwords.size(); ++i) allSwords[i].Draw(Data.GetID(IMG_SWORD));
-
-	Isaac.Draw(Data.GetID(IMG_ISAAC));
-
-	DrawMenu();
 
 	glutSwapBuffers();
 }
@@ -599,36 +606,40 @@ void cGame::DetectCollisionPlayerAttack(char * attackSide, bool beam)
 
 bool cGame::ProcessMenu() 
 {
-
-}
-
-void cGame::RenderMenu()
-{
-	bool res=true;
-	
 	//Game Logic
-	if(keys['p'])		Player.MoveUp(Scene.GetMap());
-	else if(keys[''])	Player.MoveDown(Scene.GetMap());
-	else if(keys[''])	Player.MoveLeft(Scene.GetMap());
-	else if(keys[''])	Player.MoveRight(Scene.GetMap());
+	if(keys['p']) {
+		level = 1;
+	}
+	else if(keys['c'])	level = CONTROLS;
+	else if(keys['a'])	level = ABOUT;
+
+	return true;
 }
 
-bool cGame::ProcessAbout()
+void cGame::RenderMenu(int imgId)
 {
+	glEnable(GL_TEXTURE_2D);
+	
+	glBindTexture(GL_TEXTURE_2D, Data.GetID(imgId));
+	glBegin(GL_QUADS);	
+		glTexCoord2f(0,1);		glVertex2i(0  ,0);
+		glTexCoord2f(1,1);		glVertex2i(LEVEL_WIDTH,0);
+		glTexCoord2f(1,0);		glVertex2i(LEVEL_WIDTH,LEVEL_HEIGHT+MENU_MARGIN);
+		glTexCoord2f(1,0);		glVertex2i(0  ,LEVEL_HEIGHT+MENU_MARGIN);
+	glEnd();
 
+	glDisable(GL_TEXTURE_2D);
 }
 
-void cGame::RenderAbout()
+bool cGame::ProcessBack()
 {
+	//Game Logic
+	if(keys['b'])		level = MENU;
 
+	return true;
 }
 
-bool cGame::ProcessControls()
+int cGame::getLevel()
 {
-
-}
-
-void cGame::RenderControls()
-{
-
+	return this->level;
 }
