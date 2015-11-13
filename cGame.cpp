@@ -111,19 +111,21 @@ bool cGame::Process()
 	//Process Input
 	if(keys[27])	res=false;	
 
+	char attackSide = 0;
 	//Game Logic
 	if (Player.isBeingPushed())					Player.pushMove(Scene.GetMap());
 	else if(keys['z'] && !Player.isAttacking())
 	{
-		char attackSide;
 		Player.Attack(allSwords, &attackSide);
-		DetectCollisionPlayerAttack(&attackSide);
+		DetectCollisionPlayerAttack(&attackSide, false);
 	}
 	else if(keys[GLUT_KEY_UP])					Player.MoveUp(Scene.GetMap());
 	else if(keys[GLUT_KEY_DOWN])				Player.MoveDown(Scene.GetMap());
 	else if(keys[GLUT_KEY_LEFT])				Player.MoveLeft(Scene.GetMap());
 	else if(keys[GLUT_KEY_RIGHT])				Player.MoveRight(Scene.GetMap());
 	
+	if (allSwords.size() > 0) DetectCollisionPlayerAttack(&attackSide, true);
+
 	else Player.Stop();
 
 	std::vector<int> swordPositionsToErase;
@@ -194,15 +196,12 @@ bool cGame::DetectCollisionsPlayer()
 	{
 		playerDamaged = collisionBetweenBichos(&allOctopus[i], &Player, &pushSide);
 		if (playerDamaged) Player.takeDamage(allOctopus[i].getDamage(), &pushSide);
+		else if (allOctopus[i].hasBall()) 
+		{
+			playerDamaged = collisionBetweenBichos(allOctopus[i].getBall(), &Player, &pushSide);
+			if (playerDamaged) Player.takeDamage(allOctopus[i].getBall()->getDamage(), &pushSide);
+		}
 	}
-
-	/*
-	for (int i = 0; !playerDamaged && i < allWizards.size(); ++i) 
-	{
-		playerDamaged = collisionBichoPlayer(&allWizards[i], &Player, &pushSide););
-		if (playerDamaged) Player.takeDamage(allWizards[i].getDamage(), pushSide););
-	}
-	*/
 
 	return playerDamaged;
 }
@@ -397,7 +396,7 @@ void cGame::DrawMenu()
 	glDisable(GL_TEXTURE_2D);
 }
 
-void cGame::DetectCollisionPlayerAttack(char * attackSide)
+void cGame::DetectCollisionPlayerAttack(char * attackSide, bool beam)
 {
 	int bichoX, bichoY, bichoW, bichoH;
 	int playerX, playerY, playerW, playerH;
@@ -428,6 +427,7 @@ void cGame::DetectCollisionPlayerAttack(char * attackSide)
 
 	//Dogs
 	std::vector<int> bichosPositionsToErase;
+	std::vector<int> swordsPositionsToErase;
 
 	for (int i = 0; i < allDogs.size(); ++i)
 	{
@@ -436,12 +436,28 @@ void cGame::DetectCollisionPlayerAttack(char * attackSide)
 			allDogs[i].GetPosition(&bichoX, &bichoY);
 			allDogs[i].GetWidthHeight(&bichoW, &bichoH);
 			
-			if (((attackXo >= bichoX && attackXo <= bichoX+bichoW) || (attackXo+playerW >= bichoX && attackXo+playerW <= bichoX+bichoW)) 
+			//sword attack
+			if (!beam && ((attackXo >= bichoX && attackXo <= bichoX+bichoW) || (attackXo+playerW >= bichoX && attackXo+playerW <= bichoX+bichoW)) 
 				&& 
 				((attackYo >= bichoY && attackYo <= bichoY+bichoH) || (attackYo+playerH >= bichoY && attackYo+playerH <= bichoY+bichoH)))
 			{
 				allDogs[i].takeDamage(Player.getDamage(), attackSide);
 				if (allDogs[i].isDead()) bichosPositionsToErase.push_back(i);
+			} else //sword beam
+			{
+				for (int k = 0; k < allSwords.size(); ++k)
+				{
+					if (collisionBetweenBichos(&allDogs[i], &allSwords[k], attackSide))
+					{
+						if (*attackSide == 'r') *attackSide = 'l';
+						else if (*attackSide == 'l') *attackSide = 'r';
+						else if (*attackSide == 'u') *attackSide = 'd';
+						else *attackSide = 'u';
+						allDogs[i].takeDamage(Player.getDamage(), attackSide);
+						if (allDogs[i].isDead()) bichosPositionsToErase.push_back(i);
+						swordsPositionsToErase.push_back(k);
+					}
+				}
 			}
 		}
 	}
@@ -450,6 +466,10 @@ void cGame::DetectCollisionPlayerAttack(char * attackSide)
 		allDogs.erase(allDogs.begin()+bichosPositionsToErase[j]);
 	}
 	bichosPositionsToErase.clear();
+	for (int l = 0; l < swordsPositionsToErase.size(); ++l) {
+		allSwords.erase(allSwords.begin()+swordsPositionsToErase[l]);
+	}
+	swordsPositionsToErase.clear();	
 
 	for (int i = 0; i < allOctopus.size(); ++i)
 	{
@@ -458,17 +478,35 @@ void cGame::DetectCollisionPlayerAttack(char * attackSide)
 			allOctopus[i].GetPosition(&bichoX, &bichoY);
 			allOctopus[i].GetWidthHeight(&bichoW, &bichoH);
 
-			if (((attackXo >= bichoX && attackXo <= bichoX+bichoW) || (attackXo+playerW >= bichoX && attackXo+playerW <= bichoX+bichoW)) 
+			if (!beam &&((attackXo >= bichoX && attackXo <= bichoX+bichoW) || (attackXo+playerW >= bichoX && attackXo+playerW <= bichoX+bichoW)) 
 				&& 
 				((attackYo >= bichoY && attackYo <= bichoY+bichoH) || (attackYo+playerH >= bichoY && attackYo+playerH <= bichoY+bichoH)))
 			{
 				allOctopus[i].takeDamage(Player.getDamage(), attackSide);
 				if (allOctopus[i].isDead()) bichosPositionsToErase.push_back(i);
+			}else //sword beam
+			{
+				for (int k = 0; k < allSwords.size(); ++k)
+				{
+					if (collisionBetweenBichos(&allOctopus[i], &allSwords[k], attackSide))
+					{
+						if (*attackSide == 'r') *attackSide = 'l';
+						else if (*attackSide == 'l') *attackSide = 'r';
+						else if (*attackSide == 'u') *attackSide = 'd';
+						else *attackSide = 'u';
+						allOctopus[i].takeDamage(Player.getDamage(), attackSide);
+						if (allOctopus[i].isDead()) bichosPositionsToErase.push_back(i);
+						swordsPositionsToErase.push_back(k);
+					}
+				}
 			}
 		}
 	}
 
 	for (int j = 0; j < bichosPositionsToErase.size(); ++j) {
 		allOctopus.erase(allOctopus.begin()+bichosPositionsToErase[j]);
+	}
+	for (int l = 0; l < swordsPositionsToErase.size(); ++l) {
+		allSwords.erase(allSwords.begin()+swordsPositionsToErase[l]);
 	}
 }

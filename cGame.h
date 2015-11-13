@@ -38,7 +38,7 @@ public:
 	bool Process();
 	void ChangeLevel();
 	bool DetectCollisionsPlayer();		//collision bichos with player
-	void DetectCollisionPlayerAttack(char * attackSide); //collision player attacking against bichos
+	void DetectCollisionPlayerAttack(char * attackSide, bool beam); //collision player attacking against bichos
 
 	//Output
 	void Render();
